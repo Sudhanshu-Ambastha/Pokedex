@@ -128,17 +128,19 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 5px;
+  gap: 10px;
 }
 
 .type {
-  width: 66px;
-  padding: 5px;
-  font-size: 0.7rem;
-  text-align: center;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  background-color: red;
+}
+
+.type-icon {
+  width: 24px;
+  height: 24px;
 }
 
 table {

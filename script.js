@@ -50,11 +50,13 @@ const getPokemon = async () => {
 
     // Display types
     types.innerHTML = data.types
-      .map(
-        (typeInfo) =>
-          `<span class="type">${typeInfo.type.name.toUpperCase()}</span>`
-      )
-      .join("");
+  .map(
+    (typeInfo) => `
+      <span class="type">
+        <img class="type-icon" src="PokemonTypes/${typeInfo.type.name.toUpperCase()}.png" alt="${typeInfo.type.name} type icon">
+      </span>`
+  )
+  .join("");
   } catch (error) {
     alert("Pokémon not found!");
   }
