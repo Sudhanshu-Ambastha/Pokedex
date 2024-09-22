@@ -35,7 +35,6 @@ const getPokemon = async () => {
     let spriteUrl;
     const form = formType.value === 'alola' ? '-alola' : '';
     const gender = genderType.value === 'female' ? '-f' : '';
-    const mega = megaType.value === 'mega' ? '-mega' : '';
 
     if (megaType.value === 'GMax') {
       spriteUrl = `https://projectpokemon.org/images/sprites-models/swsh-${spriteType.value}-sprites/${data.name}-gigantamax.gif`;
@@ -45,13 +44,12 @@ const getPokemon = async () => {
       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${data.name}-megax.gif`;
     } else if (megaType.value === 'megay') {
       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${data.name}-megay.gif`;
-    } else {
-      // Default sprite URL
+    } else if (megaType.value === 'mega') {
+      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${data.name}-mega.gif`; // Add your Mega sprite URL here
+     } else {
       spriteUrl = `https://projectpokemon.org/images/${spriteType.value}-sprite/${data.name}${form}${gender}.gif`;
     }
 
-    
-    //spriteUrl = `https://projectpokemon.org/images/${spriteType.value}-sprite/${data.name}${form}${mega}${gender}.gif`;
     spriteContainer.innerHTML = `<img id="sprite" src="${spriteUrl}" alt="${data.name} sprite">`;
 
     // Set stats
