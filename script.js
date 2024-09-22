@@ -14,6 +14,8 @@ const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 const spriteType = document.getElementById("spriteType");
 const formType = document.getElementById("formType");
+const megaType = document.getElementById("megaType");
+const genderType = document.getElementById("genderType");
 
 const getPokemon = async () => {
   try {
@@ -29,11 +31,14 @@ const getPokemon = async () => {
     weight.textContent = `Weight: ${data.weight}`;
     height.textContent = `Height: ${data.height}`;
 
-    // Set Pokémon sprite using the custom URL
+    // Set Pokémon sprite
     let spriteUrl;
     const form = formType.value === 'alola' ? '-alola' : '';
-    spriteUrl = `https://projectpokemon.org/images/${spriteType.value}-sprite/${data.name}${form}.gif`;
-    spriteContainer.innerHTML = `<img id="sprite" src="${spriteUrl}" alt="${data.name} front default sprite">`;
+    const gender = genderType.value === 'female' ? '-f' : '';
+    const mega = megaType.value === 'mega' ? '-mega' : '';
+    
+    spriteUrl = `https://projectpokemon.org/images/${spriteType.value}-sprite/${data.name}${form}${mega}${gender}.gif`;
+    spriteContainer.innerHTML = `<img id="sprite" src="${spriteUrl}" alt="${data.name} sprite">`;
 
     // Set stats
     hp.textContent = data.stats[0].base_stat;
