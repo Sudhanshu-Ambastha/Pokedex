@@ -1,7 +1,22 @@
-List1: from 1 - 1025
+# Pokedex
 
-List2: from 10001 - 10277
+## Description
+This project is a Pokedex application built with Expo and React Native.
+## Installation
+1. Clone the repository.
+2. Run `npm install` to install dependencies.
+## Usage
+Run `expo start` to launch the app.
 
-for alolan forms- ex= raichu-alola 
+## cmd
+```npm install -g expo-cli```
 
-[Running Model](https://onecompiler.com/html/42sv3n8c7)
+```npx create-expo-app pokedex-app```
+
+```cd pokedex-app```
+
+```npx expo start --tunnel```
+
+```npm install axios react-navigation react-navigation-stack```
+
+"https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${001}.png"
