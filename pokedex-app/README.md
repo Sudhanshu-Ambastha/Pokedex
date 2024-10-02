@@ -1,32 +1,13 @@
-#Pokedex 
+# Expo Router Example
 
-[Expo](https://docs.expo.dev/router/introduction/)
-```
-npx create-expo-app@latest -e with router jobapp
-```
-```
-cd jobapp
-```
-```
-npm run web
-```
-```
-npm run android
-```
-you need to use macOS to build the iOS project - use the Expo app if you need to do iOS development without a Mac
-```
-npm run ios
+Use [`expo-router`](https://docs.expo.dev/router/introduction/) to build native navigation using files in the `app/` directory.
+
+## 🚀 How to use
+
+```sh
+npx create-expo-app -e with-router
 ```
 
-```
-npm install expo-font axios react-native-dotenv
-```
-```
-npm start
-```
-```
-npm install -g expo-cli
-```
-```
-npx expo start --tunnel
-```
+## 📝 Notes
+
+- [Expo Router: Docs](https://docs.expo.dev/router/introduction/)

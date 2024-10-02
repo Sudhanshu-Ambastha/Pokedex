@@ -3,8 +3,9 @@ import { View, ScrollView, SafeAreaView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 
 import { COLORS, icons, images, SIZES } from '../constants';
-import { Footer, Navbar} from '../components';
+import {NearbyJobCard, Nearbyjobs, PopularJobCard, Popularjobs, ScreenHeaderBtn, Welcome} from '../components';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+// import Welcome from '../components/home/welcome/Welcome';
 
 const Home = () =>{
     const router = useRouter();
@@ -16,8 +17,10 @@ const Home = () =>{
                     headerStyle:{backgroundColor: COLORS.lightWhite},
                     headerShadowVisible: false,
                     headerLeft: () =>{
+                        <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%"/>
                     },
                     headerRight: () =>{
+                        <ScreenHeaderBtn iconUrl={images.profile} dimension="100%"/>
                     },
                     headerTitle:""
                 }}
@@ -28,8 +31,9 @@ const Home = () =>{
                     flex:1, 
                     padding:SIZES.medium
                 }}>
-                <Navbar/>
-                <Footer/>
+                {/* <Welcome/> */}
+                <Popularjobs/>
+                <Nearbyjobs/>
                 </View>
             </ScrollView>
         </SafeAreaView>
