@@ -6,8 +6,8 @@ import search from '../../assets/icons/search.png';
 
 const Navbar = () => {
   return (
-    <View>
-    <Image source={filterIcon}/>
+    <View class="flex-row">
+    <Image source={filterIcon} class/>
       <TextInput placeholder="Name Or Id"/>
     <Image source={search}/>  
     </View>

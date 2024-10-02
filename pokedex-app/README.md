@@ -1,4 +1,4 @@
-# Job-search-webapp
+#Pokedex 
 
 [Expo](https://docs.expo.dev/router/introduction/)
 ```

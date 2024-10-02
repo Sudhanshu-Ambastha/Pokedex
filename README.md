@@ -16,7 +16,10 @@ Run `expo start` to launch the app.
 ```cd pokedex-app```
 
 ```npx expo start --tunnel```
+```npx expo start --tunnel -- --reset-cache```
 
 ```npm install axios react-navigation react-navigation-stack```
+
+[nativewind](https://www.nativewind.dev/quick-starts/create-react-native-app)
 
 "https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${001}.png"

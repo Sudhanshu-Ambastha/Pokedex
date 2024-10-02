@@ -7,7 +7,7 @@
     "plugins": [
       "expo-router"
     ],
-    "name": "jobapp",
-    "slug": "jobapp"
+    "name": "Pokedex App",
+    "slug": "Pokedex App"
   }
 }
