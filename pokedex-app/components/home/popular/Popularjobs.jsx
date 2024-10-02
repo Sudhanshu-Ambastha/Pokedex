@@ -3,6 +3,7 @@ import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Modal } fro
 import { Picker } from '@react-native-picker/picker';
 import searchIcon from '../../../assets/icons/search.png';
 import filterIcon from '../../../assets/icons/filter.png';
+import Grass from '../../../assets/icons/pokemon types/GRASS.png';
 
 const Popularjobs = () => {
   // State variables to store picker values
@@ -20,10 +21,10 @@ const Popularjobs = () => {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-      {/* Filter Icon */}
-      <TouchableOpacity onPress={toggleFilterSidebar} style={styles.filterButton}>
-        <Image source={filterIcon} style={styles.filterIcon} />
-      </TouchableOpacity>
+        {/* Filter Icon */}
+        <TouchableOpacity onPress={toggleFilterSidebar} style={styles.filterButton}>
+          <Image source={filterIcon} style={styles.filterIcon} />
+        </TouchableOpacity>
 
         {/* Input Text Container */}
         <TextInput
@@ -36,7 +37,6 @@ const Popularjobs = () => {
           <Image source={searchIcon} style={styles.searchIcon} />
         </TouchableOpacity>
       </View>
-
 
       {/* Sidebar Modal */}
       <Modal
@@ -73,7 +73,7 @@ const Popularjobs = () => {
           {/* Mega Type Picker */}
           <Text style={styles.pickerLabel}>Mega Type</Text>
           <Picker
-            // selectedValue={megaType}
+            selectedValue={megaType}
             onValueChange={(itemValue) => setMegaType(itemValue)}
             style={styles.picker}
           >
@@ -104,15 +104,21 @@ const Popularjobs = () => {
       </Modal>
 
       {/* Display Pokémon Details */}
-      <Text>Pokémon Name: </Text>
-      <Text>Pokémon ID: </Text>
-      <Image source={{ uri: 'https://projectpokemon.org/images/sprites-models/homeimg/poke_capture_0001_000_mf_n_00000000_f_n.png' }} width={300} height={300}/>
-      <Text>HP: </Text>
+      <View style={styles.spriteContainer}>
+        <Text>Pokémon Name: </Text>
+        <Text>Pokémon ID: </Text>
+        <Image
+          source={{ uri: 'https://projectpokemon.org/images/sprites-models/homeimg/poke_capture_0001_000_mf_n_00000000_f_n.png' }}
+          style={styles.sprite}
+        />
+        <Image source={Grass} style={styles.typeIcon} />
+        <Text>HP: </Text>
         <Text>Attack: </Text>
         <Text>Defense: </Text>
         <Text>Sp. Attack: </Text>
         <Text>Sp. Defense: </Text>
         <Text>Speed: </Text>
+      </View>
     </View>
   );
 };
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textInput: {
-    flex: 1,  // Takes the remaining width after the search icon
+    flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
@@ -139,7 +145,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#007BFF',
     borderRadius: 5,
-    marginRight: 10,  // Space between icon and input
+    marginRight: 10,
   },
   searchIcon: {
     width: 20,
@@ -158,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
     position: 'absolute',
-    left: 0, // Sidebar slides in from the left
+    left: 0,
     top: 0,
     bottom: 0,
     width: '80%',
@@ -187,6 +193,20 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  spriteContainer: {
+    flexGrow: 2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sprite: {
+    width: 180,
+    height: 180,
+  },
+  typeIcon: {
+    width: 24,
+    height: 24,
   },
 });
 
