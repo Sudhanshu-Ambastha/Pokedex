@@ -23,3 +23,5 @@ Run `expo start` to launch the app.
 [nativewind](https://www.nativewind.dev/quick-starts/create-react-native-app)
 
 "https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${001}.png"
+
+<!-- v3 -->
