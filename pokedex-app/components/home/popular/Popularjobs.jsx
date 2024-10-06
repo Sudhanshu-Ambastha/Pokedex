@@ -3,10 +3,10 @@ import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Modal } fro
 import { Picker } from '@react-native-picker/picker';
 import searchIcon from '../../../assets/icons/search.png';
 import filterIcon from '../../../assets/icons/filter.png';
-// Import all type icons from your index.js
-import typeIcons from '../../../assets/index';
+import typeIcons from '../../../assets/index'; // Import your type icons
 
-const Popularjobs = () => {
+const PokemonSearchApp = () => {
+  const [imgType, setImgType] = useState('GIF');
   const [spriteType, setSpriteType] = useState('normal');
   const [formType, setFormType] = useState('standard');
   const [megaType, setMegaType] = useState('regular');
@@ -37,7 +37,39 @@ const Popularjobs = () => {
     }
   };
 
-  // Helper function to get the icons for each type
+const getSpriteUrl = () => {
+  if (!pokemonData) return null;
+
+  const form = formType === 'alola' ? '-alola' : '';
+  const gender = genderType === 'female' ? '-f' : '';
+  let spriteUrl;
+
+  // Handle GIF sprite URLs
+  if (imgType === 'GIF') {
+    // Different cases for mega forms and special cases
+    if (megaType === 'GMax') {
+      spriteUrl = `https://projectpokemon.org/images/sprites-models/swsh-${spriteType}-sprites/${pokemonData.name.toLowerCase()}-gigantamax.gif`;
+    } else if (megaType === 'primal') {
+      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-primal.gif`;
+    } else if (megaType === 'megax') {
+      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megax.gif`;
+    } else if (megaType === 'megay') {
+      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megay.gif`;
+    } else if (megaType === 'mega') {
+      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-mega.gif`;
+    } else {
+      // Regular GIF for standard Pokémon
+      spriteUrl = `https://projectpokemon.org/images/${spriteType}-sprite/${pokemonData.name}${form}${gender}.gif`;
+    }
+    
+    console.log("Generated GIF URL:", spriteUrl); // Add this line
+  }  else if (imgType === 'Low') {
+    spriteUrl = pokemonData.sprites.front_default; // Use the low-resolution sprite
+  }
+
+  return spriteUrl;
+};
+
   const getTypeIcons = () => {
     if (pokemonData && pokemonData.types) {
       return pokemonData.types.map((typeObj) => {
@@ -67,10 +99,8 @@ const Popularjobs = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Error Message */}
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-      {/* Sidebar Modal */}
       <Modal
         visible={isFilterVisible}
         transparent={true}
@@ -79,6 +109,17 @@ const Popularjobs = () => {
       >
         <View style={styles.sidebar}>
           <Text style={styles.sidebarTitle}>Filter Options</Text>
+
+          <Text style={styles.pickerLabel}>Image Type</Text>
+          <Picker
+            selectedValue={imgType}
+            onValueChange={(itemValue) => setImgType(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="GIF" value="GIF" />
+            {/* <Picker.Item label="3D" value="3D" /> */}
+            <Picker.Item label="Low" value="Low" />
+          </Picker>
 
           <Text style={styles.pickerLabel}>Sprite Type</Text>
           <Picker
@@ -130,19 +171,19 @@ const Popularjobs = () => {
         </View>
       </Modal>
 
-      {/* Display Pokémon Details */}
       {pokemonData && (
         <View style={styles.spriteContainer}>
           <Text style={styles.pokemonName}>{pokemonData.name.toUpperCase()}</Text>
           <Text style={styles.pokemonID}>#{pokemonData.id}</Text>
 
-          {/* Display Pokémon Sprite */}
+          {/* Display Pokémon Sprite with Filters */}
           <Image
-            source={{ uri: pokemonData.sprites.front_default }}
+            source={{ uri: getSpriteUrl() }}
             style={styles.sprite}
+            resizeMode="contain"
+            onError={() => console.log("Failed to load sprite image")}
           />
 
-          {/* Display Pokémon Types with Icons */}
           <View style={styles.typeIconsContainer}>
             {getTypeIcons()}
           </View>
@@ -161,7 +202,6 @@ const Popularjobs = () => {
   );
 };
 
-// Define your styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -182,91 +222,79 @@ const styles = StyleSheet.create({
   },
   searchIconContainer: {
     padding: 10,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#4CAF50',
     borderRadius: 5,
-    marginRight: 10,
   },
   searchIcon: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
   },
   filterButton: {
-    marginTop: 10,
-    alignItems: 'center',
+    marginRight: 10,
   },
   filterIcon: {
-    width: 30,
-    height: 30,
+    width: 24,
+    height: 24,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
   },
   sidebar: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     padding: 20,
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: '80%',
-    borderRightWidth: 1,
-    borderRightColor: '#ccc',
   },
   sidebarTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  pickerLabel: {
+    marginTop: 10,
+    fontWeight: 'bold',
+  },
   picker: {
+    height: 50,
+    width: '100%',
     marginBottom: 20,
   },
-  pickerLabel: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
   closeButton: {
-    backgroundColor: '#007BFF',
     padding: 10,
+    backgroundColor: '#FF5733',
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 20,
   },
   closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
   },
   spriteContainer: {
-    flexGrow: 2,
-    display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sprite: {
-    width: 180,
-    height: 180,
-  },
-  typeIconsContainer: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  typeIcon: {
-    width: 24,
-    height: 24,
-    marginHorizontal: 5,
   },
   pokemonName: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
   },
   pokemonID: {
     fontSize: 18,
-    color: '#555',
-    marginBottom: 20,
+    color: '#777',
   },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    marginVertical: 10,
+  sprite: {
+    width: 150,
+    height: 150,
+    marginBottom: 10,
+  },
+  typeIconsContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  typeIcon: {
+    width: 30,
+    height: 30,
+    marginRight: 5,
   },
 });
 
-export default Popularjobs;
+export default PokemonSearchApp;
