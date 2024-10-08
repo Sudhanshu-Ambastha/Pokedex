@@ -1,12 +1,12 @@
 import ScreenHeaderBtn from "./common/header/ScreenHeaderBtn";
-
-import Nearbyjobs from "./home/nearby/Nearbyjobs";
-import Popularjobs from "./home/popular/Popularjobs";
-
+import Error from "./home/Error/Error";
+import Pokedex from "./home/pokedex/Pokedex";
+import Welcome from './home/welcome/Welcome';
 
 
 export {
   ScreenHeaderBtn,
-  Nearbyjobs,
-  Popularjobs, 
+  Error,
+  Pokedex, 
+  Welcome
 };

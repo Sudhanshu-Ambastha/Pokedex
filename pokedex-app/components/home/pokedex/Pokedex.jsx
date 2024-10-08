@@ -3,7 +3,9 @@ import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Modal } fro
 import { Picker } from '@react-native-picker/picker';
 import searchIcon from '../../../assets/icons/search.png';
 import filterIcon from '../../../assets/icons/filter.png';
-import typeIcons from '../../../assets/index'; // Import your type icons
+import typeIcons from '../../../assets/pokemon-types/index'; 
+import Error from '../Error/Error';
+import styles from './pokedex.style';
 
 const PokemonSearchApp = () => {
   const [imgType, setImgType] = useState('GIF');
@@ -37,44 +39,47 @@ const PokemonSearchApp = () => {
     }
   };
 
-const getSpriteUrl = () => {
-  if (!pokemonData) return null;
+  // Function to retry fetching the Pokémon
+  const retryFetch = () => {
+    setError('');
+    setPokemonData(null);
+    setPokemonName(''); // Optionally reset the input field
+  };
 
-  const form = formType === 'alola' ? '-alola' : '';
-  const gender = genderType === 'female' ? '-f' : '';
-  let spriteUrl;
+  const getSpriteUrl = () => {
+    if (!pokemonData) return null;
 
-  // Handle GIF sprite URLs
-  if (imgType === 'GIF') {
-    // Different cases for mega forms and special cases
-    if (megaType === 'GMax') {
-      spriteUrl = `https://projectpokemon.org/images/sprites-models/swsh-${spriteType}-sprites/${pokemonData.name.toLowerCase()}-gigantamax.gif`;
-    } else if (megaType === 'primal') {
-      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-primal.gif`;
-    } else if (megaType === 'megax') {
-      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megax.gif`;
-    } else if (megaType === 'megay') {
-      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megay.gif`;
-    } else if (megaType === 'mega') {
-      spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-mega.gif`;
-    } else {
-      // Regular GIF for standard Pokémon
-      spriteUrl = `https://projectpokemon.org/images/${spriteType}-sprite/${pokemonData.name}${form}${gender}.gif`;
+    const form = formType === 'alola' ? '-alola' : '';
+    const gender = genderType === 'female' ? '-f' : '';
+    let spriteUrl;
+
+    // Handle GIF sprite URLs
+    if (imgType === 'GIF') {
+      if (megaType === 'GMax') {
+        spriteUrl = `https://projectpokemon.org/images/sprites-models/swsh-normal-sprites/${pokemonData.name}-gigantamax.gif`;
+      } else if (megaType === 'primal') {
+        spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-primal.gif`;
+      } else if (megaType === 'megax') {
+        spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megax.gif`;
+      } else if (megaType === 'megay') {
+        spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megay.gif`;
+      } else if (megaType === 'mega') {
+        spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-mega.gif`;
+      } else {
+        spriteUrl = `https://projectpokemon.org/images/${spriteType}-sprite/${pokemonData.name}${form}${gender}.gif`;
+      }
+    } else if (imgType === 'Low') {
+      spriteUrl = pokemonData.sprites.front_default;
     }
-    
-    console.log("Generated GIF URL:", spriteUrl); // Add this line
-  }  else if (imgType === 'Low') {
-    spriteUrl = pokemonData.sprites.front_default; // Use the low-resolution sprite
-  }
 
-  return spriteUrl;
-};
+    return spriteUrl;
+  };
 
   const getTypeIcons = () => {
     if (pokemonData && pokemonData.types) {
       return pokemonData.types.map((typeObj) => {
         const typeName = typeObj.type.name.charAt(0).toUpperCase() + typeObj.type.name.slice(1);
-        const TypeIcon = typeIcons[typeName]; // Access the type icon dynamically
+        const TypeIcon = typeIcons[typeName];
         return <Image key={typeName} source={TypeIcon} style={styles.typeIcon} />;
       });
     }
@@ -82,7 +87,7 @@ const getSpriteUrl = () => {
   };
 
   return (
-    <View style={styles.container}>
+   <View style={styles.container}>
       <View style={styles.searchContainer}>
         <TouchableOpacity onPress={toggleFilterSidebar} style={styles.filterButton}>
           <Image source={filterIcon} style={styles.filterIcon} />
@@ -181,7 +186,6 @@ const getSpriteUrl = () => {
             source={{ uri: getSpriteUrl() }}
             style={styles.sprite}
             resizeMode="contain"
-            onError={() => console.log("Failed to load sprite image")}
           />
 
           <View style={styles.typeIconsContainer}>
@@ -202,99 +206,5 @@ const getSpriteUrl = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  textInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-  },
-  searchIconContainer: {
-    padding: 10,
-    backgroundColor: '#4CAF50',
-    borderRadius: 5,
-  },
-  searchIcon: {
-    width: 24,
-    height: 24,
-  },
-  filterButton: {
-    marginRight: 10,
-  },
-  filterIcon: {
-    width: 24,
-    height: 24,
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  sidebar: {
-    flex: 1,
-    backgroundColor: 'white',
-    padding: 20,
-  },
-  sidebarTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  pickerLabel: {
-    marginTop: 10,
-    fontWeight: 'bold',
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 20,
-  },
-  closeButton: {
-    padding: 10,
-    backgroundColor: '#FF5733',
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  closeButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  spriteContainer: {
-    alignItems: 'center',
-  },
-  pokemonName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  pokemonID: {
-    fontSize: 18,
-    color: '#777',
-  },
-  sprite: {
-    width: 150,
-    height: 150,
-    marginBottom: 10,
-  },
-  typeIconsContainer: {
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  typeIcon: {
-    width: 30,
-    height: 30,
-    marginRight: 5,
-  },
-});
 
 export default PokemonSearchApp;

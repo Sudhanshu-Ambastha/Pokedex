@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, ScrollView, SafeAreaView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { COLORS, icons, SIZES } from '../constants';
-import {Nearbyjobs, Popularjobs, ScreenHeaderBtn} from '../components';
+import {ScreenHeaderBtn, Welcome, Pokedex, Error} from '../components';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import Welcome from '../components/home/welcome/Welcome';
 
@@ -29,8 +29,8 @@ const Home = () =>{
                     padding:SIZES.medium
                 }}>
                 {/* <Welcome/> */}
-                <Popularjobs/>
-                <Nearbyjobs/>
+                <Pokedex/>
+                {/* <Error/> */}
                 </View>
             </ScrollView>
         </SafeAreaView>
