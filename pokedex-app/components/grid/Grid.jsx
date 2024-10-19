@@ -3,6 +3,7 @@ import { View, Text, TextInput, Image, TouchableOpacity, FlatList, Dimensions } 
 import filterIcon from '../../assets/icons/filter.png';
 import searchIcon from '../../assets/icons/search.png';
 import styles from './grid.style'; // Import the separate style file
+import FilterModal from '../filterModal/FilterModal'; // Import the filter modal
 
 const calculateColumns = () => {
   const screenWidth = Dimensions.get('window').width;
@@ -14,27 +15,39 @@ const PokemonGrid = () => {
   const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [numColumns, setNumColumns] = useState(calculateColumns());
+  const [imgType, setImgType] = useState('GIF');
+  const [isFilterVisible, setFilterVisible] = useState(false);
 
   useEffect(() => {
     fetchPokemonList();
     const updateLayout = () => setNumColumns(calculateColumns());
     Dimensions.addEventListener('change', updateLayout);
-    return () => Dimensions.removeEventListener('change', updateLayout);
+    return () => Dimensions.removeEventListener('change', updateLayout); // Correct usage with remove
   }, []);
 
   const fetchPokemonList = async () => {
     try {
-      const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151'); // Example: First 151 Pokémon
+      const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=900');
       const data = await response.json();
       const results = data.results.map((pokemon, index) => ({
         ...pokemon,
         id: index + 1, // Assigning ID based on index
-        spriteUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png`,
+        spriteUrl: getSpriteUrl(index + 1, pokemon.name),
       }));
       setPokemonList(results);
       setFilteredPokemon(results);
     } catch (error) {
       console.error('Error fetching Pokémon list:', error);
+    }
+  };
+
+  const getSpriteUrl = (id, name) => {
+    if (imgType === 'GIF') {
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+    } else if (imgType === 'Low') {
+      return `https://projectpokemon.org/images/sprites-models/swsh-normal-sprites/${name}-gigantamax.gif`;
+    } else {
+      return `https://projectpokemon.org/images/normal-sprite/${name}.gif`;
     }
   };
 
@@ -44,6 +57,10 @@ const PokemonGrid = () => {
       pokemon.name.toLowerCase().includes(text.toLowerCase())
     );
     setFilteredPokemon(filtered);
+  };
+
+  const toggleFilterSidebar = () => {
+    setFilterVisible(!isFilterVisible);
   };
 
   const renderPokemon = ({ item }) => (
@@ -56,7 +73,7 @@ const PokemonGrid = () => {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-        <TouchableOpacity style={styles.filterButton}>
+        <TouchableOpacity onPress={toggleFilterSidebar} style={styles.filterButton}>
           <Image source={filterIcon} style={styles.filterIcon} />
         </TouchableOpacity>
         <TextInput
@@ -76,6 +93,12 @@ const PokemonGrid = () => {
         numColumns={numColumns}
         columnWrapperStyle={styles.columnWrapper}
         key={numColumns} // Re-render on column count change
+      />
+      <FilterModal
+        isVisible={isFilterVisible}
+        toggleFilter={toggleFilterSidebar}
+        imgType={imgType}
+        setImgType={setImgType}
       />
     </View>
   );
