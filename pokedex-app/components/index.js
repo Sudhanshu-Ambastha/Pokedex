@@ -1,6 +1,6 @@
-import Welcome from './home/welcome/Welcome';
+import Welcome from './welcome/Welcome';
 import Pokedex from "./pokedex/Pokedex";
-import FilterModal from './Filter/filter';
+import FilterModal from './filterModal/FilterModal';
 import Error from "./Error/Error";
 
 

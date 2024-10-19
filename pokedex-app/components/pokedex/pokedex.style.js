@@ -96,8 +96,32 @@ const styles = StyleSheet.create({
     height: 30,
     marginRight: 5,
   },
-  textData: {
-    
+  textDataContainer: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    marginVertical: 5, 
+  },
+  dataLabel: {
+    fontWeight: 'bold',
+    alignSelf: 'flex-start',
+    textAlign: 'center',
+    marginRight: 150,
+  },
+  dataValue: {
+    alignSelf: 'flex-end', 
+    textAlign: 'center',
+    marginLeft: 200,
+    marginTop: -20,
+  },
+  evolBtn:{
+    backgroundColor: 'orange',
+    marginTop: 20,
+  },
+  evolText:{
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    padding: 5,
   }
 });
 

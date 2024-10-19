@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
 import searchIcon from '../../assets/icons/search.png';
 import filterIcon from '../../assets/icons/filter.png';
-import typeIcons from '../../assets/pokemon-types/index'; 
-import Error from '../home/Error/Error';
+import typeIcons from '../../assets/pokemon-types/index';
+import FilterModal from '../filterModal/FilterModal';
 import styles from './pokedex.style';
 
 const PokemonSearchApp = () => {
@@ -39,16 +38,14 @@ const PokemonSearchApp = () => {
     }
   };
 
-  // Function to retry fetching the Pokémon
   const retryFetch = () => {
     setError('');
     setPokemonData(null);
-    setPokemonName(''); // Optionally reset the input field
+    setPokemonName(''); 
   };
 
   const getSpriteUrl = () => {
     if (!pokemonData) return null;
-
     const form = formType === 'alola' ? '-alola' : '';
     const gender = genderType === 'female' ? '-f' : '';
     let spriteUrl;
@@ -71,7 +68,6 @@ const PokemonSearchApp = () => {
     } else if (imgType === 'Low') {
       spriteUrl = pokemonData.sprites.front_default;
     }
-
     return spriteUrl;
   };
 
@@ -87,125 +83,85 @@ const PokemonSearchApp = () => {
   };
 
   return (
-   <View style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.searchContainer}>
         <TouchableOpacity onPress={toggleFilterSidebar} style={styles.filterButton}>
           <Image source={filterIcon} style={styles.filterIcon} />
         </TouchableOpacity>
-
         <TextInput
           placeholder="Enter Pokémon Name or ID"
           style={styles.textInput}
           onChangeText={setPokemonName}
         />
-
         <TouchableOpacity style={styles.searchIconContainer} onPress={getPokemon}>
           <Image source={searchIcon} style={styles.searchIcon} />
         </TouchableOpacity>
       </View>
-
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
-
-      <Modal
-        visible={isFilterVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={toggleFilterSidebar}
-      >
-        <View style={styles.sidebar}>
-          <Text style={styles.sidebarTitle}>Filter Options</Text>
-
-          <Text style={styles.pickerLabel}>Image Type</Text>
-          <Picker
-            selectedValue={imgType}
-            onValueChange={(itemValue) => setImgType(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="GIF" value="GIF" />
-            {/* <Picker.Item label="3D" value="3D" /> */}
-            <Picker.Item label="Low" value="Low" />
-          </Picker>
-
-          <Text style={styles.pickerLabel}>Sprite Type</Text>
-          <Picker
-            selectedValue={spriteType}
-            onValueChange={(itemValue) => setSpriteType(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Normal" value="normal" />
-            <Picker.Item label="Shiny" value="shiny" />
-          </Picker>
-
-          <Text style={styles.pickerLabel}>Form Type</Text>
-          <Picker
-            selectedValue={formType}
-            onValueChange={(itemValue) => setFormType(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Standard" value="standard" />
-            <Picker.Item label="Alola" value="alola" />
-          </Picker>
-
-          <Text style={styles.pickerLabel}>Mega Type</Text>
-          <Picker
-            selectedValue={megaType}
-            onValueChange={(itemValue) => setMegaType(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Regular" value="regular" />
-            <Picker.Item label="Mega" value="mega" />
-            <Picker.Item label="Mega X" value="megax" />
-            <Picker.Item label="Mega Y" value="megay" />
-            <Picker.Item label="Primal" value="primal" />
-            <Picker.Item label="G-Max" value="gmax" />
-          </Picker>
-
-          <Text style={styles.pickerLabel}>Gender Type</Text>
-          <Picker
-            selectedValue={genderType}
-            onValueChange={(itemValue) => setGenderType(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Male" value="male" />
-            <Picker.Item label="Female" value="female" />
-          </Picker>
-
-          <TouchableOpacity style={styles.closeButton} onPress={toggleFilterSidebar}>
-            <Text style={styles.closeButtonText}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
+      <FilterModal
+        isVisible={isFilterVisible}
+        toggleFilter={toggleFilterSidebar}
+        imgType={imgType}
+        setImgType={setImgType}
+        spriteType={spriteType}
+        setSpriteType={setSpriteType}
+        formType={formType}
+        setFormType={setFormType}
+        megaType={megaType}
+        setMegaType={setMegaType}
+        genderType={genderType}
+        setGenderType={setGenderType}
+      />
       {pokemonData && (
         <View style={styles.spriteContainer}>
           <Text style={styles.pokemonName}>{pokemonData.name.toUpperCase()}</Text>
           <Text style={styles.pokemonID}>#{pokemonData.id}</Text>
-
-          {/* Display Pokémon Sprite with Filters */}
           <Image
             source={{ uri: getSpriteUrl() }}
             style={styles.sprite}
             resizeMode="contain"
           />
-
           <View style={styles.typeIconsContainer}>
             {getTypeIcons()}
           </View>
-         <View style={styles.textData}>
-          <Text>Weight: {pokemonData.weight}</Text>
-          <Text>Height: {pokemonData.height}</Text>
-          <Text>HP: {pokemonData.stats[0].base_stat}</Text>
-          <Text>Attack: {pokemonData.stats[1].base_stat}</Text>
-          <Text>Defense: {pokemonData.stats[2].base_stat}</Text>
-          <Text>Sp. Attack: {pokemonData.stats[3].base_stat}</Text>
-          <Text>Sp. Defense: {pokemonData.stats[4].base_stat}</Text>
-          <Text>Speed: {pokemonData.stats[5].base_stat}</Text>
+          <View style={styles.textData}>
+            <Text style={styles.dataLabel}>Weight:</Text>
+            <Text style={styles.dataValue}>{pokemonData.weight}</Text>
           </View>
+          <View style={styles.textData}>
+            <Text style={styles.dataLabel}>Height:</Text>
+            <Text style={styles.dataValue}>{pokemonData.height}</Text>
+          </View>
+          <View style={styles.textData}>
+            <Text style={styles.dataLabel}>HP:</Text>
+            <Text style={styles.dataValue}>{pokemonData.stats[0].base_stat}</Text>
+          </View>
+          <View style={styles.textData}>
+            <Text style={styles.dataLabel}>Attack:</Text>
+            <Text style={styles.dataValue}>{pokemonData.stats[1].base_stat}</Text>
+          </View>
+          <View style={styles.textData}>
+            <Text style={styles.dataLabel}>Defense:</Text>
+            <Text style={styles.dataValue}>{pokemonData.stats[2].base_stat}</Text>
+          </View>
+          <View style={styles.textData}>
+            <Text style={styles.dataLabel}>Sp. Attack:</Text>
+            <Text style={styles.dataValue}>{pokemonData.stats[3].base_stat}</Text>
+          </View>
+          <View style={styles.textData}>
+            <Text style={styles.dataLabel}>Sp. Defense:</Text>
+            <Text style={styles.dataValue}>{pokemonData.stats[4].base_stat}</Text>
+          </View>
+          <View style={styles.textData}>
+            <Text style={styles.dataLabel}>Speed:</Text>
+            <Text style={styles.dataValue}>{pokemonData.stats[5].base_stat}</Text>
+          </View>
+          <TouchableOpacity style={styles.evolBtn} >
+          <Text style={styles.evolText}>Check Evolution</Text></TouchableOpacity>
         </View>
       )}
     </View>
   );
 };
-
 
 export default PokemonSearchApp;
