@@ -5,13 +5,14 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 5,
     backgroundColor: 'transparent',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+    marginTop: -20,
   },
   textInput: {
     flex: 1,
@@ -95,6 +96,9 @@ const styles = StyleSheet.create({
     height: 30,
     marginRight: 5,
   },
+  textData: {
+    
+  }
 });
 
 export default styles;

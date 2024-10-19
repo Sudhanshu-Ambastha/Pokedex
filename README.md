@@ -14,7 +14,7 @@ Run `expo start` to launch the app.
 ```npx create-expo-app pokedex-app```
 
 ```cd pokedex-app```
-
+```cd pokedex-app && npx expo start --tunnel```
 ```npx expo start --tunnel```
 ```npx expo start --tunnel -- --reset-cache```
 

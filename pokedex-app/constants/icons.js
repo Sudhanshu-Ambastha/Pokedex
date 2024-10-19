@@ -1,10 +1,13 @@
-import menu from "../assets/icons/menu.png";
 // General icons
 import search from "../assets/icons/search.png";
 import filter from "../assets/icons/filter.png";
 import left from "../assets/icons/left.png";
 import chevronLeft from '../assets/icons/chevron-left.png';
 import chevronRight from '../assets/icons/chevron-right.png';
+export const loading = require('../assets/icons/Loading.gif');
+export const Pokedex = require('../assets/icons/Pokedex.png');
+export const WTP = require('../assets/icons/WTP.png') ;
+export const loadingText = require('../assets/icons/LoadingText.png') ;
 
 // Error page icons
 export const Echo = require('../assets/Error/unown-echo.gif');

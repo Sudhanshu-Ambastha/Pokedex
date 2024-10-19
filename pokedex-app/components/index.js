@@ -1,12 +1,12 @@
-import ScreenHeaderBtn from "./common/header/ScreenHeaderBtn";
-import Error from "./home/Error/Error";
-import Pokedex from "./home/pokedex/Pokedex";
 import Welcome from './home/welcome/Welcome';
+import Pokedex from "./pokedex/Pokedex";
+import FilterModal from './Filter/filter';
+import Error from "./Error/Error";
 
 
 export {
-  ScreenHeaderBtn,
+  Welcome,
+  Pokedex,
+  FilterModal,
   Error,
-  Pokedex, 
-  Welcome
 };

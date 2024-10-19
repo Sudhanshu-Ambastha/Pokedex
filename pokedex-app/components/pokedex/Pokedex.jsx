@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import searchIcon from '../../../assets/icons/search.png';
-import filterIcon from '../../../assets/icons/filter.png';
-import typeIcons from '../../../assets/pokemon-types/index'; 
-import Error from '../Error/Error';
+import searchIcon from '../../assets/icons/search.png';
+import filterIcon from '../../assets/icons/filter.png';
+import typeIcons from '../../assets/pokemon-types/index'; 
+import Error from '../home/Error/Error';
 import styles from './pokedex.style';
 
 const PokemonSearchApp = () => {
@@ -191,7 +191,7 @@ const PokemonSearchApp = () => {
           <View style={styles.typeIconsContainer}>
             {getTypeIcons()}
           </View>
-
+         <View style={styles.textData}>
           <Text>Weight: {pokemonData.weight}</Text>
           <Text>Height: {pokemonData.height}</Text>
           <Text>HP: {pokemonData.stats[0].base_stat}</Text>
@@ -200,6 +200,7 @@ const PokemonSearchApp = () => {
           <Text>Sp. Attack: {pokemonData.stats[3].base_stat}</Text>
           <Text>Sp. Defense: {pokemonData.stats[4].base_stat}</Text>
           <Text>Speed: {pokemonData.stats[5].base_stat}</Text>
+          </View>
         </View>
       )}
     </View>
