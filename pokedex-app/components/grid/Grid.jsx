@@ -50,6 +50,32 @@ const PokemonGrid = () => {
       return `https://projectpokemon.org/images/normal-sprite/${name}.gif`;
     }
   };
+  // const getSpriteUrl = (id, name) => {
+  //   if (!pokemonData) return null;
+  //   const form = formType === 'alola' ? '-alola' : '';
+  //   const gender = genderType === 'female' ? '-f' : '';
+  //   let spriteUrl;
+
+  //   // Handle GIF sprite URLs
+  //   if (imgType === 'GIF') {
+  //     if (megaType === 'GMax') {
+  //       spriteUrl = `https://projectpokemon.org/images/sprites-models/swsh-normal-sprites/${pokemonData.name}-gigantamax.gif`;
+  //     } else if (megaType === 'primal') {
+  //       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-primal.gif`;
+  //     } else if (megaType === 'megax') {
+  //       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megax.gif`;
+  //     } else if (megaType === 'megay') {
+  //       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megay.gif`;
+  //     } else if (megaType === 'mega') {
+  //       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-mega.gif`;
+  //     } else {
+  //       spriteUrl = `https://projectpokemon.org/images/${spriteType}-sprite/${pokemonData.name}${form}${gender}.gif`;
+  //     }
+  //   } else if (imgType === 'Low') {
+  //     spriteUrl = pokemonData.sprites.front_default;
+  //   }
+  //   return spriteUrl;
+  // };
 
   const handleSearch = (text) => {
     setSearchText(text);

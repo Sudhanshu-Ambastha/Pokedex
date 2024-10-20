@@ -114,6 +114,10 @@ const styles = StyleSheet.create({
   evolBtn:{
     backgroundColor: 'orange',
     marginTop: 20,
+    borderRadius: 10,
+    padding: 2,
+    paddingBottom: 4,
+    textAlign: 'center',
   },
   evolText:{
     fontSize: 18,

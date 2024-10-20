@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    // marginTop: -20,
   },
   textInput: {
     flex: 1,

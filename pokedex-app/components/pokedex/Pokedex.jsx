@@ -3,7 +3,7 @@ import { View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
 import searchIcon from '../../assets/icons/search.png';
 import filterIcon from '../../assets/icons/filter.png';
 import typeIcons from '../../assets/pokemon-types/index';
-import FilterModal from '../filterModal/FilterModal';
+import {FilterModal, Error} from '../index';
 import styles from './pokedex.style';
 
 const PokemonSearchApp = () => {
@@ -15,7 +15,7 @@ const PokemonSearchApp = () => {
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [pokemonName, setPokemonName] = useState('');
   const [pokemonData, setPokemonData] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(''); // Existing error state
 
   const toggleFilterSidebar = () => {
     setFilterVisible(!isFilterVisible);
@@ -31,17 +31,18 @@ const PokemonSearchApp = () => {
       }
       const data = await response.json();
       setPokemonData(data);
-      setError('');
+      setError(''); // Clear the error if successful
     } catch (error) {
-      setError(error.message);
+      setError(error.message); // Set the error message
       setPokemonData(null);
     }
   };
 
+  // Handle retry by resetting error state
   const retryFetch = () => {
-    setError('');
-    setPokemonData(null);
-    setPokemonName(''); 
+    setError(''); // Clear error state
+    setPokemonData(null); // Clear Pokemon data
+    setPokemonName(''); // Optionally clear the input field if needed
   };
 
   const getSpriteUrl = () => {
@@ -97,7 +98,60 @@ const PokemonSearchApp = () => {
           <Image source={searchIcon} style={styles.searchIcon} />
         </TouchableOpacity>
       </View>
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+      {error ? (
+        <Error onRetry={retryFetch} /> 
+      ) : (
+        pokemonData && (
+          <View style={styles.spriteContainer}>
+            <Text style={styles.pokemonName}>{pokemonData.name.toUpperCase()}</Text>
+            <Text style={styles.pokemonID}>#{pokemonData.id}</Text>
+            <Image
+              source={{ uri: getSpriteUrl() }}
+              style={styles.sprite}
+              resizeMode="contain"
+            />
+            <View style={styles.typeIconsContainer}>
+              {getTypeIcons()}
+            </View>
+            <View style={styles.textData}>
+              <Text style={styles.dataLabel}>Weight:</Text>
+              <Text style={styles.dataValue}>{pokemonData.weight}</Text>
+            </View>
+            <View style={styles.textData}>
+              <Text style={styles.dataLabel}>Height:</Text>
+              <Text style={styles.dataValue}>{pokemonData.height}</Text>
+            </View>
+            <View style={styles.textData}>
+              <Text style={styles.dataLabel}>HP:</Text>
+              <Text style={styles.dataValue}>{pokemonData.stats[0].base_stat}</Text>
+            </View>
+            <View style={styles.textData}>
+              <Text style={styles.dataLabel}>Attack:</Text>
+              <Text style={styles.dataValue}>{pokemonData.stats[1].base_stat}</Text>
+            </View>
+            <View style={styles.textData}>
+              <Text style={styles.dataLabel}>Defense:</Text>
+              <Text style={styles.dataValue}>{pokemonData.stats[2].base_stat}</Text>
+            </View>
+            <View style={styles.textData}>
+              <Text style={styles.dataLabel}>Sp. Attack:</Text>
+              <Text style={styles.dataValue}>{pokemonData.stats[3].base_stat}</Text>
+            </View>
+            <View style={styles.textData}>
+              <Text style={styles.dataLabel}>Sp. Defense:</Text>
+              <Text style={styles.dataValue}>{pokemonData.stats[4].base_stat}</Text>
+            </View>
+            <View style={styles.textData}>
+              <Text style={styles.dataLabel}>Speed:</Text>
+              <Text style={styles.dataValue}>{pokemonData.stats[5].base_stat}</Text>
+            </View>
+            <TouchableOpacity style={styles.evolBtn}>
+              <Text style={styles.evolText}>Check Evolution</Text>
+            </TouchableOpacity>
+          </View>
+        )
+      )}
       <FilterModal
         isVisible={isFilterVisible}
         toggleFilter={toggleFilterSidebar}
@@ -112,54 +166,6 @@ const PokemonSearchApp = () => {
         genderType={genderType}
         setGenderType={setGenderType}
       />
-      {pokemonData && (
-        <View style={styles.spriteContainer}>
-          <Text style={styles.pokemonName}>{pokemonData.name.toUpperCase()}</Text>
-          <Text style={styles.pokemonID}>#{pokemonData.id}</Text>
-          <Image
-            source={{ uri: getSpriteUrl() }}
-            style={styles.sprite}
-            resizeMode="contain"
-          />
-          <View style={styles.typeIconsContainer}>
-            {getTypeIcons()}
-          </View>
-          <View style={styles.textData}>
-            <Text style={styles.dataLabel}>Weight:</Text>
-            <Text style={styles.dataValue}>{pokemonData.weight}</Text>
-          </View>
-          <View style={styles.textData}>
-            <Text style={styles.dataLabel}>Height:</Text>
-            <Text style={styles.dataValue}>{pokemonData.height}</Text>
-          </View>
-          <View style={styles.textData}>
-            <Text style={styles.dataLabel}>HP:</Text>
-            <Text style={styles.dataValue}>{pokemonData.stats[0].base_stat}</Text>
-          </View>
-          <View style={styles.textData}>
-            <Text style={styles.dataLabel}>Attack:</Text>
-            <Text style={styles.dataValue}>{pokemonData.stats[1].base_stat}</Text>
-          </View>
-          <View style={styles.textData}>
-            <Text style={styles.dataLabel}>Defense:</Text>
-            <Text style={styles.dataValue}>{pokemonData.stats[2].base_stat}</Text>
-          </View>
-          <View style={styles.textData}>
-            <Text style={styles.dataLabel}>Sp. Attack:</Text>
-            <Text style={styles.dataValue}>{pokemonData.stats[3].base_stat}</Text>
-          </View>
-          <View style={styles.textData}>
-            <Text style={styles.dataLabel}>Sp. Defense:</Text>
-            <Text style={styles.dataValue}>{pokemonData.stats[4].base_stat}</Text>
-          </View>
-          <View style={styles.textData}>
-            <Text style={styles.dataLabel}>Speed:</Text>
-            <Text style={styles.dataValue}>{pokemonData.stats[5].base_stat}</Text>
-          </View>
-          <TouchableOpacity style={styles.evolBtn} >
-          <Text style={styles.evolText}>Check Evolution</Text></TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 };

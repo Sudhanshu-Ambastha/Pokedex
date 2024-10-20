@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, ScrollView, SafeAreaView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { COLORS, icons, SIZES } from '../constants';
-import { Welcome, PokemonGrid, Pokedex, Error} from '../components';
+import { Welcome, PokemonGrid, Pokedex, Evol, Error} from '../components';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Home = () =>{
@@ -27,8 +27,9 @@ const Home = () =>{
                     padding:SIZES.medium
                 }}>
                 {/* <Welcome/> */}
-                <PokemonGrid/>
+                {/* <PokemonGrid/> */}
                 {/* <Pokedex/> */}
+                <Evol/>
                 {/* <Error/> */}
                 </View>
             </ScrollView>

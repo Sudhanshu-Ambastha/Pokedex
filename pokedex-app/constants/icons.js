@@ -4,6 +4,7 @@ import filter from "../assets/icons/filter.png";
 import left from "../assets/icons/left.png";
 import chevronLeft from '../assets/icons/chevron-left.png';
 import chevronRight from '../assets/icons/chevron-right.png';
+import homeIcon from "../assets/icons/homeIcon.png";
 export const loading = require('../assets/icons/Loading.gif');
 export const Pokedex = require('../assets/icons/Pokedex.png');
 export const WTP = require('../assets/icons/WTP.png') ;
@@ -18,5 +19,5 @@ export const Exclamation = require('../assets/Error/unown-exclamation.gif');
 export const Zero = require('../assets/Error/electrode.gif');
 
 // Export remaining icons as needed
-export { search, filter, left, chevronLeft, chevronRight };
+export { search, filter, left, chevronLeft, chevronRight, homeIcon };
 
