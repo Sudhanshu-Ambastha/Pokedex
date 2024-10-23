@@ -162,9 +162,9 @@ const PokeData = () => {
               <Text style={styles.dataLabel}>Speed:</Text>
               <Text style={styles.dataValue}>{pokemonData.stats[5].base_stat}</Text>
             </View>
-            <TouchableOpacity style={styles.evolBtn} >
-             <Image source={homeIcon} style={styles.evolText} />
-            </TouchableOpacity>
+            <TouchableOpacity style={styles.evolBtn} onPress={() => navigation.navigate('PokemonGrid')}>
+              <Image source={homeIcon} style={styles.evolText} />
+            </TouchableOpacity> 
             <TouchableOpacity style={styles.evolBtn} onPress={handleEvolutionClick}>
              <Text style={styles.evolText}>Check Evolution</Text>
             </TouchableOpacity>
