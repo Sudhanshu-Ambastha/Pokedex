@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
-import searchIcon from '../../assets/icons/search.png';
-import filterIcon from '../../assets/icons/filter.png';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { searchIcon, homeIcon, filterIcon } from '../../constants/icons';
 import typeIcons from '../../assets/pokemon-types/index';
-import {FilterModal, Error} from '../index';
-import styles from './pokedex.style';
+import { FilterModal, Evolutions, Error } from '../index';
+import styles from './pokedata.style';
 
-const PokemonSearchApp = () => {
+const PokeData = () => {
+  const navigation = useNavigation(); // Ensure navigation is initialized
+  const route = useRoute(); // Access the route parameters
+  const { pokemonName: initialPokemonName } = route.params; // Get the Pokémon name from params
+
   const [imgType, setImgType] = useState('GIF');
   const [spriteType, setSpriteType] = useState('normal');
   const [formType, setFormType] = useState('standard');
   const [megaType, setMegaType] = useState('regular');
   const [genderType, setGenderType] = useState('male');
   const [isFilterVisible, setFilterVisible] = useState(false);
-  const [pokemonName, setPokemonName] = useState('');
+  const [pokemonName, setPokemonName] = useState(initialPokemonName || ''); // Set initial name from params
   const [pokemonData, setPokemonData] = useState(null);
-  const [error, setError] = useState(''); // Existing error state
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (pokemonName) {
+      getPokemon(); // Fetch Pokémon data if name is present
+    }
+  }, [pokemonName]);
 
   const toggleFilterSidebar = () => {
     setFilterVisible(!isFilterVisible);
@@ -38,7 +48,6 @@ const PokemonSearchApp = () => {
     }
   };
 
-  // Handle retry by resetting error state
   const retryFetch = () => {
     setError(''); // Clear error state
     setPokemonData(null); // Clear Pokemon data
@@ -83,6 +92,12 @@ const PokemonSearchApp = () => {
     return null;
   };
 
+  const handleEvolutionClick = () => {
+    if (pokemonData) {
+      navigation.navigate('Evolutions', { pokemonName: pokemonData.name }); // Navigate to Evolutions page
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -93,6 +108,7 @@ const PokemonSearchApp = () => {
           placeholder="Enter Pokémon Name or ID"
           style={styles.textInput}
           onChangeText={setPokemonName}
+          value={pokemonName} // Bind the value to the input state
         />
         <TouchableOpacity style={styles.searchIconContainer} onPress={getPokemon}>
           <Image source={searchIcon} style={styles.searchIcon} />
@@ -146,8 +162,11 @@ const PokemonSearchApp = () => {
               <Text style={styles.dataLabel}>Speed:</Text>
               <Text style={styles.dataValue}>{pokemonData.stats[5].base_stat}</Text>
             </View>
-            <TouchableOpacity style={styles.evolBtn}>
-              <Text style={styles.evolText}>Check Evolution</Text>
+            <TouchableOpacity style={styles.evolBtn} >
+             <Image source={homeIcon} style={styles.evolText} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.evolBtn} onPress={handleEvolutionClick}>
+             <Text style={styles.evolText}>Check Evolution</Text>
             </TouchableOpacity>
           </View>
         )
@@ -170,4 +189,4 @@ const PokemonSearchApp = () => {
   );
 };
 
-export default PokemonSearchApp;
+export default PokeData;

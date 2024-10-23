@@ -1,6 +1,6 @@
 // General icons
-import search from "../assets/icons/search.png";
-import filter from "../assets/icons/filter.png";
+import searchIcon from "../assets/icons/search.png";
+import filterIcon from "../assets/icons/filter.png";
 import left from "../assets/icons/left.png";
 import chevronLeft from '../assets/icons/chevron-left.png';
 import chevronRight from '../assets/icons/chevron-right.png';
@@ -19,5 +19,5 @@ export const Exclamation = require('../assets/Error/unown-exclamation.gif');
 export const Zero = require('../assets/Error/electrode.gif');
 
 // Export remaining icons as needed
-export { search, filter, left, chevronLeft, chevronRight, homeIcon };
+export { searchIcon, filterIcon, left, chevronLeft, chevronRight, homeIcon };
 

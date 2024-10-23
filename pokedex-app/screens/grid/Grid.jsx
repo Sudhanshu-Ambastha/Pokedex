@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
-import filterIcon from '../../assets/icons/filter.png';
-import searchIcon from '../../assets/icons/search.png';
+import { useNavigation } from '@react-navigation/native';
+// import filterIcon from '../../assets/icons/filter.png';
+// import searchIcon from '../../assets/icons/search.png';
+import { searchIcon, filterIcon } from '../../constants/icons.js';
 import styles from './grid.style'; // Import the separate style file
 import FilterModal from '../filterModal/FilterModal'; // Import the filter modal
 
@@ -17,12 +19,13 @@ const PokemonGrid = () => {
   const [numColumns, setNumColumns] = useState(calculateColumns());
   const [imgType, setImgType] = useState('GIF');
   const [isFilterVisible, setFilterVisible] = useState(false);
+  const navigation = useNavigation(); // Use the navigation hook
 
   useEffect(() => {
     fetchPokemonList();
     const updateLayout = () => setNumColumns(calculateColumns());
     Dimensions.addEventListener('change', updateLayout);
-    return () => Dimensions.removeEventListener('change', updateLayout); // Correct usage with remove
+    return () => Dimensions.removeEventListener('change', updateLayout);
   }, []);
 
   const fetchPokemonList = async () => {
@@ -31,7 +34,7 @@ const PokemonGrid = () => {
       const data = await response.json();
       const results = data.results.map((pokemon, index) => ({
         ...pokemon,
-        id: index + 1, // Assigning ID based on index
+        id: index + 1,
         spriteUrl: getSpriteUrl(index + 1, pokemon.name),
       }));
       setPokemonList(results);
@@ -50,32 +53,6 @@ const PokemonGrid = () => {
       return `https://projectpokemon.org/images/normal-sprite/${name}.gif`;
     }
   };
-  // const getSpriteUrl = (id, name) => {
-  //   if (!pokemonData) return null;
-  //   const form = formType === 'alola' ? '-alola' : '';
-  //   const gender = genderType === 'female' ? '-f' : '';
-  //   let spriteUrl;
-
-  //   // Handle GIF sprite URLs
-  //   if (imgType === 'GIF') {
-  //     if (megaType === 'GMax') {
-  //       spriteUrl = `https://projectpokemon.org/images/sprites-models/swsh-normal-sprites/${pokemonData.name}-gigantamax.gif`;
-  //     } else if (megaType === 'primal') {
-  //       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-primal.gif`;
-  //     } else if (megaType === 'megax') {
-  //       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megax.gif`;
-  //     } else if (megaType === 'megay') {
-  //       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-megay.gif`;
-  //     } else if (megaType === 'mega') {
-  //       spriteUrl = `https://projectpokemon.org/images/normal-sprite/${pokemonData.name}-mega.gif`;
-  //     } else {
-  //       spriteUrl = `https://projectpokemon.org/images/${spriteType}-sprite/${pokemonData.name}${form}${gender}.gif`;
-  //     }
-  //   } else if (imgType === 'Low') {
-  //     spriteUrl = pokemonData.sprites.front_default;
-  //   }
-  //   return spriteUrl;
-  // };
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -89,11 +66,15 @@ const PokemonGrid = () => {
     setFilterVisible(!isFilterVisible);
   };
 
+  const handlePokemonPress = (pokemon) => {
+    navigation.navigate('PokeData', { pokemonName: pokemon.name }); // Pass the Pokémon name
+  };
+
   const renderPokemon = ({ item }) => (
-    <View style={styles.item}>
+    <TouchableOpacity onPress={() => handlePokemonPress(item)} style={styles.item}>
       <Image source={{ uri: item.spriteUrl }} style={styles.sprite} />
       <Text style={styles.pokemonName}>{item.name}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

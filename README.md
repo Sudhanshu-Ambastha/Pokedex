@@ -14,11 +14,23 @@ Run `expo start` to launch the app.
 ```npx create-expo-app pokedex-app```
 
 ```cd pokedex-app```
+
+```npm install expo-router```
+
 ```npx expo start --tunnel```
+
 ```npm install @react-navigation/native```
+
 ```npx expo start --tunnel -- --reset-cache```
+
 ```cd pokedex-app && npx expo start --tunnel```
+
+```npx expo install react-native-screens react-native-safe-area-context```
+
 ```npm install axios react-navigation react-navigation-stack```
+
+```npm install @react-navigation/stack```
+
 ```npm install react-native-screens react-native-safe-area-context```
 
 [nativewind](https://www.nativewind.dev/quick-starts/create-react-native-app)

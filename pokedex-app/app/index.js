@@ -1,39 +1,20 @@
-import { useState } from 'react';
-import { View, ScrollView, SafeAreaView } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
-import { COLORS, icons, SIZES } from '../constants';
-import { Welcome, PokemonGrid, Pokedex, Evol, Error} from '../components';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useRouter } from 'expo-router';
+import { Welcome, PokemonGrid, PokeData, Evolutions } from '../screens';
 
-const Home = () =>{
-    const router = useRouter();
+const StackNavigator = createNativeStackNavigator(); 
 
-    return (
-        <SafeAreaView style={{flex:1, backgroundColor:COLORS.lightWhite}}>
-            <Stack.Screen options={{
-                    headerStyle:{backgroundColor: COLORS.lightWhite},
-                    headerShadowVisible: false,
-                    headerLeft: () =>{
-                    },
-                    headerRight: () =>{
-                    },
-                    headerTitle:""
-                }}
-            />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View 
-                style={{
-                    flex:1, 
-                    padding:SIZES.medium
-                }}>
-                {/* <Welcome/> */}
-                {/* <PokemonGrid/> */}
-                {/* <Pokedex/> */}
-                <Evol/>
-                {/* <Error/> */}
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    )
-}
+const Home = () => {
+  const router = useRouter();
+
+  return (
+    <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <StackNavigator.Screen name="Welcome" component={Welcome} />
+      <StackNavigator.Screen name="PokemonGrid" component={PokemonGrid} />
+      <StackNavigator.Screen name="Evolutions" component={Evolutions} />
+      <StackNavigator.Screen name="PokeData" component={PokeData} />
+    </StackNavigator.Navigator>
+  );
+};
+
 export default Home;
