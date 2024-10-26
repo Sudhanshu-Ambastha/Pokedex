@@ -8,10 +8,11 @@ const EvolutionPage = ({ route, navigation }) => {
   const [evolutionData, setEvolutionData] = useState([]);
   const [error, setError] = useState('');
   const [currentChainId, setCurrentChainId] = useState(1); // Start with the first evolution chain
+  const spriteType = "normal"; // Set this to any sprite type like "normal", "shiny", etc.
 
   useEffect(() => {
     fetchEvolutionData(currentChainId);
-  }, [currentChainId]); // Fetch data whenever currentChainId changes
+  }, [currentChainId]);
 
   const fetchEvolutionData = async (chainId) => {
     try {
@@ -20,9 +21,6 @@ const EvolutionPage = ({ route, navigation }) => {
       const chainData = await chainResponse.json();
 
       const evolutions = [];
-      let current = chainData.chain;
-
-      // Collect all evolutions from the chain
       const getAllEvolutions = (chain) => {
         evolutions.push({
           name: chain.species.name,
@@ -31,7 +29,7 @@ const EvolutionPage = ({ route, navigation }) => {
         chain.evolves_to.forEach(getAllEvolutions);
       };
 
-      getAllEvolutions(current);
+      getAllEvolutions(chainData.chain);
       setEvolutionData(evolutions);
       setError('');
     } catch (err) {
@@ -61,15 +59,17 @@ const EvolutionPage = ({ route, navigation }) => {
       <TouchableOpacity
         key={evolution.id}
         style={styles.item}
-        onPress={() => navigation.navigate('PokeData', { pokemonName: evolution.name })} // Use PokeData here
+        onPress={() => navigation.navigate('PokeData', { pokemonName: evolution.name })}
       >
         <Image
           source={{
-            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolution.id}.png`,
+            uri: `https://projectpokemon.org/images/${spriteType}-sprite/${evolution.name}.gif`,
           }}
           style={styles.sprite}
         />
-        <Text style={styles.pokemonName}>{evolution.name.charAt(0).toUpperCase() + evolution.name.slice(1)}</Text>
+        <Text style={styles.pokemonName}>
+          {evolution.name.charAt(0).toUpperCase() + evolution.name.slice(1)}
+        </Text>
       </TouchableOpacity>
     ));
   };

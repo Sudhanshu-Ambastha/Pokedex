@@ -162,7 +162,7 @@ const PokeData = () => {
             <Image source={chevronRight} style={styles.rightIcon} />
           </TouchableOpacity>
         </View>
-
+        
         <ImageBackground source={getTypeBackground()} style={styles.typeBackground}>
           <Image source={{ uri: getSpriteUrl() }} style={styles.sprite} resizeMode="contain" />
         </ImageBackground>

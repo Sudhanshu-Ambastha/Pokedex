@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: '#f8f8f8',
-    padding: 10,
+    padding: 25,
     marginVertical: 5,
     borderRadius: 5,
     alignItems: 'center', // Centers the sprite and name
