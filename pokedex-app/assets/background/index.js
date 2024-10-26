@@ -1,22 +1,40 @@
 //background
-import Bugbg from './Bug.png';
-import Darkbg from './Dark.png';
-import Dragonbg from './Dragon.png';
-import Electricbg from './Electric.png';
-import Fairybg from './Fairy.png';
-import Fightingbg from './Fighting.png';
-import Firebg from './Fire.png';
-import Flyingbg from './Flying.png';
-import Ghostbg from './Ghost.png';
-import Grassbg from './Grass.png';
-import Groundbg from './Ground.png';
-import Icebg from './Ice.png';
-import Normalbg from './Normal.png';
-import Poisonbg from './Poison.png';
-import Psychicbg from './Psychic.png';
-import Rockbg from './Rock.png';
-import Steelbg from './Steel.png';
-import Waterbg from './Water.png';
+import Bug from './Bug.png';
+import Dark from './Dark.png';
+import Dragon from './Dragon.png';
+import Electric from './Electric.png';
+import Fairy from './Fairy.png';
+import Fighting from './Fighting.png';
+import Fire from './Fire.png';
+import Flying from './Flying.png';
+import Ghost from './Ghost.png';
+import Grass from './Grass.png';
+import Ground from './Ground.png';
+import Ice from './Ice.png';
+import Normal from './Normal.png';
+import Poison from './Poison.png';
+import Psychic from './Psychic.png';
+import Rock from './Rock.png';
+import Steel from './Steel.png';
+import Water from './Water.png';
 
-export default{Bugbg, Darkbg, Dragonbg, Electricbg, Fairybg, Fightingbg, Firebg, Flyingbg, Ghostbg, Grassbg, Groundbg, Icebg, Normalbg, Poisonbg, Psychicbg, Rockbg, Steelbg, Waterbg };
-
+export default {
+  bug: Bug,
+  dark: Dark,
+  dragon: Dragon,
+  electric: Electric,
+  fairy: Fairy,
+  fighting: Fighting,
+  fire: Fire,
+  flying: Flying,
+  ghost: Ghost,
+  grass: Grass,
+  ground: Ground,
+  ice: Ice,
+  normal: Normal,
+  poison: Poison,
+  psychic: Psychic,
+  rock: Rock,
+  steel: Steel,
+  water: Water,
+};

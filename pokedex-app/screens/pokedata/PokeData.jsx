@@ -1,57 +1,84 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { searchIcon, homeIcon, filterIcon } from '../../constants/icons';
+import { searchIcon, homeIcon, filterIcon, chevronLeft, chevronRight } from '../../constants/icons';
+import bgType from '../../assets/background/index';
 import typeIcons from '../../assets/pokemon-types/index';
 import { FilterModal, Evolutions, Error } from '../index';
 import styles from './pokedata.style';
 
 const PokeData = () => {
-  const navigation = useNavigation(); // Ensure navigation is initialized
-  const route = useRoute(); // Access the route parameters
-  const { pokemonName: initialPokemonName } = route.params; // Get the Pokémon name from params
-
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { pokemonName: initialPokemonName } = route.params;
   const [imgType, setImgType] = useState('GIF');
   const [spriteType, setSpriteType] = useState('normal');
   const [formType, setFormType] = useState('standard');
   const [megaType, setMegaType] = useState('regular');
   const [genderType, setGenderType] = useState('male');
   const [isFilterVisible, setFilterVisible] = useState(false);
-  const [pokemonName, setPokemonName] = useState(initialPokemonName || ''); // Set initial name from params
+  const [pokemonName, setPokemonName] = useState(initialPokemonName || '');
+  const [pokemonId, setPokemonId] = useState(null);  // Track Pokémon ID
   const [pokemonData, setPokemonData] = useState(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (pokemonName) {
-      getPokemon(); // Fetch Pokémon data if name is present
+      getPokemonByName(pokemonName);
     }
   }, [pokemonName]);
+
+  useEffect(() => {
+    if (pokemonId !== null) {
+      getPokemonById(pokemonId);
+    }
+  }, [pokemonId]);
 
   const toggleFilterSidebar = () => {
     setFilterVisible(!isFilterVisible);
   };
 
-  const getPokemon = async () => {
+  const getPokemonByName = async (name) => {
     try {
-      const response = await fetch(
-        `https://pokeapi-proxy.freecodecamp.rocks/api/pokemon/${pokemonName.toLowerCase()}`
-      );
-      if (!response.ok) {
-        throw new Error('Pokémon not found!');
-      }
+      const response = await fetch(`https://pokeapi-proxy.freecodecamp.rocks/api/pokemon/${name.toLowerCase()}`);
+      if (!response.ok) throw new Error('Pokémon not found!');
       const data = await response.json();
       setPokemonData(data);
-      setError(''); // Clear the error if successful
+      setPokemonId(data.id); // Set ID based on fetched Pokémon data
+      setError('');
     } catch (error) {
-      setError(error.message); // Set the error message
+      setError(error.message);
       setPokemonData(null);
     }
   };
 
+  const getPokemonById = async (id) => {
+    try {
+      const response = await fetch(`https://pokeapi-proxy.freecodecamp.rocks/api/pokemon/${id}`);
+      if (!response.ok) throw new Error('Pokémon not found!');
+      const data = await response.json();
+      setPokemonData(data);
+      setPokemonName(data.name); // Update name based on fetched Pokémon data
+      setError('');
+    } catch (error) {
+      setError(error.message);
+      setPokemonData(null);
+    }
+  };
+
+  // Updated logic to decrement/increment Pokémon ID
+  const onLeftClick = () => {
+    if (pokemonId > 1) setPokemonId((prevId) => prevId - 1);
+  };
+
+  const onRightClick = () => {
+    setPokemonId((prevId) => prevId + 1);
+  };
+
   const retryFetch = () => {
-    setError(''); // Clear error state
-    setPokemonData(null); // Clear Pokemon data
-    setPokemonName(''); // Optionally clear the input field if needed
+    setError('');
+    setPokemonData(null);
+    setPokemonName('');
   };
 
   const getSpriteUrl = () => {
@@ -59,8 +86,6 @@ const PokeData = () => {
     const form = formType === 'alola' ? '-alola' : '';
     const gender = genderType === 'female' ? '-f' : '';
     let spriteUrl;
-
-    // Handle GIF sprite URLs
     if (imgType === 'GIF') {
       if (megaType === 'GMax') {
         spriteUrl = `https://projectpokemon.org/images/sprites-models/swsh-normal-sprites/${pokemonData.name}-gigantamax.gif`;
@@ -94,8 +119,16 @@ const PokeData = () => {
 
   const handleEvolutionClick = () => {
     if (pokemonData) {
-      navigation.navigate('Evolutions', { pokemonName: pokemonData.name }); // Navigate to Evolutions page
+      navigation.navigate('Evolutions', { pokemonName: pokemonData.name });
     }
+  };
+
+  const getTypeBackground = () => {
+    if (pokemonData && pokemonData.types && pokemonData.types.length > 0) {
+      const primaryType = pokemonData.types[0].type.name.toLowerCase();
+      return bgType[primaryType];
+    }
+    return null;
   };
 
   return (
@@ -108,28 +141,33 @@ const PokeData = () => {
           placeholder="Enter Pokémon Name or ID"
           style={styles.textInput}
           onChangeText={setPokemonName}
-          value={pokemonName} // Bind the value to the input state
+          value={pokemonName}
         />
-        <TouchableOpacity style={styles.searchIconContainer} onPress={getPokemon}>
+        <TouchableOpacity style={styles.searchIconContainer} onPress={() => getPokemonByName(pokemonName)}>
           <Image source={searchIcon} style={styles.searchIcon} />
         </TouchableOpacity>
       </View>
-
       {error ? (
-        <Error onRetry={retryFetch} /> 
+        <Error onRetry={retryFetch} />
       ) : (
         pokemonData && (
           <View style={styles.spriteContainer}>
             <Text style={styles.pokemonName}>{pokemonData.name.toUpperCase()}</Text>
             <Text style={styles.pokemonID}>#{pokemonData.id}</Text>
-            <Image
-              source={{ uri: getSpriteUrl() }}
-              style={styles.sprite}
-              resizeMode="contain"
-            />
-            <View style={styles.typeIconsContainer}>
-              {getTypeIcons()}
-            </View>
+            <View style={styles.iconWrapper}>
+          <TouchableOpacity onPress={onLeftClick}>
+            <Image source={chevronLeft} style={styles.leftIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onRightClick}>
+            <Image source={chevronRight} style={styles.rightIcon} />
+          </TouchableOpacity>
+        </View>
+
+        <ImageBackground source={getTypeBackground()} style={styles.typeBackground}>
+          <Image source={{ uri: getSpriteUrl() }} style={styles.sprite} resizeMode="contain" />
+        </ImageBackground>
+
+        <View style={styles.typeIconsContainer}>{getTypeIcons()}</View>
             <View style={styles.textData}>
               <Text style={styles.dataLabel}>Weight:</Text>
               <Text style={styles.dataValue}>{pokemonData.weight}</Text>

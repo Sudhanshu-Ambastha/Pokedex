@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 // import filterIcon from '../../assets/icons/filter.png';
 // import searchIcon from '../../assets/icons/search.png';
 import { searchIcon, filterIcon } from '../../constants/icons.js';
-import styles from './grid.style'; // Import the separate style file
-import FilterModal from '../filterModal/FilterModal'; // Import the filter modal
+import styles from './grid.style'; 
+import FilterModal from '../filterModal/FilterModal'; 
 
 const calculateColumns = () => {
   const screenWidth = Dimensions.get('window').width;

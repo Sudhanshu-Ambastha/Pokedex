@@ -15,7 +15,7 @@ const Welcome = () => {
         setIsLoading(false);
         navigation.navigate('Error', { message: 'Loading took too long. Please retry.' });
       }
-    }, 10000); // 10-second timeout
+    }, 20000); // 20-second timeout
 
     return () => clearTimeout(timeoutId); 
   }, [isLoading, navigation]);

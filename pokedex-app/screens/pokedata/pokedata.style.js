@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    marginTop: -20,
   },
   textInput: {
     flex: 1,
@@ -35,55 +34,41 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  errorText: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  sidebar: {
-    flex: 1,
-    backgroundColor: 'white',
-    padding: 20,
-  },
-  sidebarTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  pickerLabel: {
-    marginTop: 10,
-    fontWeight: 'bold',
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 20,
-  },
-  closeButton: {
-    padding: 10,
-    backgroundColor: '#FF5733',
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  closeButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
   spriteContainer: {
     alignItems: 'center',
+    marginBottom: 10,
   },
-  pokemonName: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  iconWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    position: 'absolute',
+    paddingHorizontal: 20,
+    marginTop: 10,
+    top: 120,
+    marginBottom: -40, 
+    zIndex: 1,
   },
-  pokemonID: {
-    fontSize: 18,
-    color: '#777',
+  leftIcon: {
+    width: 40,
+    height: 40,
+    tintColor: 'white',
+  },
+  rightIcon: {
+    width: 40,
+    height: 40,
+    tintColor: 'white',
+  },
+  typeBackground: {
+    width: 350,
+    height: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   sprite: {
     width: 150,
     height: 150,
-    marginBottom: 10,
   },
   typeIconsContainer: {
     flexDirection: 'row',

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     textAlign: 'center', // Center the text within the button
   },
   chevronIcon: {
-    width: 30, // Set a smaller size for the chevron icons
+    width: 30, 
     height: 30,
     tintColor: 'white', // Change the color to ensure visibility
   },
