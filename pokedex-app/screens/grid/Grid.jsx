@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-// import filterIcon from '../../assets/icons/filter.png';
-// import searchIcon from '../../assets/icons/search.png';
 import { searchIcon, filterIcon } from '../../constants/icons.js';
-import styles from './grid.style'; 
-import FilterModal from '../filterModal/FilterModal'; 
+import styles from './grid.style';
+import FilterModal from '../filterModal/FilterModal';
+import { getPokemonList, getSpriteUrl } from '../../constants/api.js';
 
 const calculateColumns = () => {
   const screenWidth = Dimensions.get('window').width;
@@ -19,7 +18,7 @@ const PokemonGrid = () => {
   const [numColumns, setNumColumns] = useState(calculateColumns());
   const [imgType, setImgType] = useState('GIF');
   const [isFilterVisible, setFilterVisible] = useState(false);
-  const navigation = useNavigation(); // Use the navigation hook
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchPokemonList();
@@ -30,27 +29,20 @@ const PokemonGrid = () => {
 
   const fetchPokemonList = async () => {
     try {
-      const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=900');
-      const data = await response.json();
-      const results = data.results.map((pokemon, index) => ({
+      const results = await getPokemonList();
+      const pokemonWithSprites = results.map((pokemon) => ({
         ...pokemon,
-        id: index + 1,
-        spriteUrl: getSpriteUrl(index + 1, pokemon.name),
+        spriteUrl: getSpriteUrl(
+          pokemon,
+          imgType,   // Image type ('GIF' or 'Low')
+          'normal',  // Sprite type
+          'standard' // Form type, can adjust based on your filter settings
+        ),
       }));
-      setPokemonList(results);
-      setFilteredPokemon(results);
+      setPokemonList(pokemonWithSprites);
+      setFilteredPokemon(pokemonWithSprites);
     } catch (error) {
       console.error('Error fetching Pokémon list:', error);
-    }
-  };
-
-  const getSpriteUrl = (id, name) => {
-    if (imgType === 'GIF') {
-      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-    } else if (imgType === 'Low') {
-      return `https://projectpokemon.org/images/sprites-models/swsh-normal-sprites/${name}-gigantamax.gif`;
-    } else {
-      return `https://projectpokemon.org/images/normal-sprite/${name}.gif`;
     }
   };
 
@@ -67,12 +59,16 @@ const PokemonGrid = () => {
   };
 
   const handlePokemonPress = (pokemon) => {
-    navigation.navigate('PokeData', { pokemonName: pokemon.name }); // Pass the Pokémon name
+    navigation.navigate('PokeData', { pokemonName: pokemon.name });
   };
 
   const renderPokemon = ({ item }) => (
     <TouchableOpacity onPress={() => handlePokemonPress(item)} style={styles.item}>
-      <Image source={{ uri: item.spriteUrl }} style={styles.sprite} />
+      <Image 
+        source={{ uri: item.spriteUrl }} 
+        style={styles.sprite} 
+        resizeMode="contain" 
+      />
       <Text style={styles.pokemonName}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -99,7 +95,7 @@ const PokemonGrid = () => {
         keyExtractor={(item) => item.id.toString()}
         numColumns={numColumns}
         columnWrapperStyle={styles.columnWrapper}
-        key={numColumns} // Re-render on column count change
+        key={numColumns}
       />
       <FilterModal
         isVisible={isFilterVisible}
