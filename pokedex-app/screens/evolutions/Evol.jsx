@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { chevronLeft, homeIcon, chevronRight } from '../../constants/icons';
 import styles from './evol.style';
 import Error from '../error/Error';
-import { getEvolutionChain } from '../../constants/api'; 
+import { getEvolutionChain, getSpriteUrl } from '../../constants/api'; 
 
 const EvolutionPage = ({ route, navigation }) => {
   const [evolutionData, setEvolutionData] = useState([]);
@@ -11,6 +11,7 @@ const EvolutionPage = ({ route, navigation }) => {
   const [currentChainId, setCurrentChainId] = useState(1); 
   const [imageUrls, setImageUrls] = useState([]); 
   const spriteType = "normal"; 
+
   useEffect(() => {
     fetchEvolutionData(currentChainId);
   }, [currentChainId]);
@@ -32,11 +33,11 @@ const EvolutionPage = ({ route, navigation }) => {
       setEvolutionData(evolutions);
       setError('');
 
-      // Initialize image URLs array with primary URLs
       const initialUrls = evolutions.map((evolution) => ({
         id: evolution.id,
-        url: `https://projectpokemon.org/images/${spriteType}-sprite/${evolution.name}.gif`,
+        url: getSpriteUrl({ name: evolution.name }, 'GIF', spriteType, '', '', ''),
       }));
+
       setImageUrls(initialUrls);
     } catch (err) {
       setError(err.message);
@@ -45,18 +46,14 @@ const EvolutionPage = ({ route, navigation }) => {
   };
 
   const handleNavigate = (direction) => {
-    if (direction === 'left') {
-      setCurrentChainId((prevId) => Math.max(prevId - 1, 1));
-    } else if (direction === 'right') {
-      setCurrentChainId((prevId) => prevId + 1);
-    }
+    setCurrentChainId((prevId) => direction === 'left' ? Math.max(prevId - 1, 1) : prevId + 1);
   };
 
   const handleImageError = (evolutionId) => {
     setImageUrls((prevUrls) =>
       prevUrls.map((item) =>
         item.id === evolutionId
-          ? { ...item, url: `https://pokeapi-proxy.freecodecamp.rocks/api/v2/pokemon/${evolutionId}/sprites/front_default` }
+          ? { ...item, url: getSpriteUrl(evolutionId, 'normal', '', '', 'male') } 
           : item
       )
     );
