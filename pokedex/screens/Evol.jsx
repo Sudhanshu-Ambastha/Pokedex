@@ -2,41 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { chevronLeft, homeIcon, chevronRight } from '../constants/icons';
 import Error from './Error';
-import { getEvolutionChain, getSpriteUrl } from '../../constants/api';
+import { getEvolutionChain, getSpriteUrl } from '../constants/api';
 import '../global.css';
 
-type Evolution = {
-  name: string;
-  id: string;
-};
-
-type ImageUrl = {
-  id: string;
-  url: string;
-};
-
-type EvolutionPageProps = {
-  route: any;
-  navigation: any;
-};
-
-const EvolutionPage: React.FC<EvolutionPageProps> = ({ route, navigation }) => {
-  const [evolutionData, setEvolutionData] = useState<Evolution[]>([]);
-  const [error, setError] = useState<string>('');
-  const [currentChainId, setCurrentChainId] = useState<number>(1);
-  const [imageUrls, setImageUrls] = useState<ImageUrl[]>([]);
+const EvolutionPage = ({ route, navigation }) => {
+  const [evolutionData, setEvolutionData] = useState([]);
+  const [error, setError] = useState('');
+  const [currentChainId, setCurrentChainId] = useState(1);
+  const [imageUrls, setImageUrls] = useState([]);
   const spriteType = "normal";
 
   useEffect(() => {
     fetchEvolutionData(currentChainId);
   }, [currentChainId]);
 
-  const fetchEvolutionData = async (chainId: number) => {
+  const fetchEvolutionData = async (chainId) => {
     try {
       const chainData = await getEvolutionChain(chainId);
 
-      const evolutions: Evolution[] = [];
-      const getAllEvolutions = (chain: any) => {
+      const evolutions = [];
+      const getAllEvolutions = (chain) => {
         evolutions.push({
           name: chain.species.name,
           id: chain.species.url.split('/').filter(Boolean).pop(),
@@ -54,17 +39,17 @@ const EvolutionPage: React.FC<EvolutionPageProps> = ({ route, navigation }) => {
       }));
 
       setImageUrls(initialUrls);
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message);
       setEvolutionData([]);
     }
   };
 
-  const handleNavigate = (direction: 'left' | 'right') => {
+  const handleNavigate = (direction) => {
     setCurrentChainId((prevId) => (direction === 'left' ? Math.max(prevId - 1, 1) : prevId + 1));
   };
 
-  const handleImageError = (evolutionId: string) => {
+  const handleImageError = (evolutionId) => {
     setImageUrls((prevUrls) =>
       prevUrls.map((item) =>
         item.id === evolutionId

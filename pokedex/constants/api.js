@@ -6,57 +6,44 @@ const BACKUP_SPRITE_URL = 'https://raw.githubusercontent.com/pokeapi/sprites/mas
 const GENERATION_8_URL = 'https://github.com/dokkanart/swsh-gifs/blob/master/Generation%208/';
 const EVOL_URL = 'https://pokeapi.co/api/v2/pokemon-species';
 
-interface Pokemon {
-  id: number;
-  name: string;
-  sprites: {
-    front_default: string;
-  };
-}
-
-interface EvolutionNode {
-  species: { name: string; url: string };
-  evolves_to: EvolutionNode[];
-}
-
 /** Fetch the list of all Pokémon. */
-export const getPokemonList = async (): Promise<{ name: string; url: string }[]> => {
+export const getPokemonList = async () => {
   try {
     const response = await axios.get(`${BASE_URL}?limit=1000`); // Adjust limit as needed
     return response.data.results;
-  } catch (error: any) {
+  } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to fetch Pokémon list');
   }
 };
 
 /** Fetch Pokémon data by name. */
-export const getPokemonByName = async (name: string): Promise<Pokemon> => {
+export const getPokemonByName = async (name) => {
   try {
     const response = await axios.get(`${BASE_URL}/${name.toLowerCase()}`);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     throw new Error(error.response?.data?.message || 'Pokémon not found!');
   }
 };
 
 /** Fetch Pokémon data by ID. */
-export const getPokemonById = async (id: number): Promise<Pokemon> => {
+export const getPokemonById = async (id) => {
   try {
     const response = await axios.get(`${BASE_URL}/${id}`);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     throw new Error(error.response?.data?.message || 'Pokémon not found!');
   }
 };
 
 /** Generate the Pokémon sprite URL based on selected types and forms, with backups. */
 export const getSpriteUrl = (
-  pokemonData: Pokemon | null,
-  imgType: 'GIF' | 'PNG' | 'Low',
-  formType?: 'alola' | null,
-  megaType?: 'GMax' | 'primal' | 'megax' | 'megay' | 'mega' | null,
-  genderType?: 'female' | null
-): string | null => {
+  pokemonData,
+  imgType,
+  formType = null,
+  megaType = null,
+  genderType = null
+) => {
   if (!pokemonData) return null;
 
   const form = formType === 'alola' ? '-alola' : '';
@@ -88,30 +75,30 @@ export const getSpriteUrl = (
 };
 
 /** Fetch Pokémon species data. */
-export const getPokemonSpecies = async (name: string): Promise<any> => {
+export const getPokemonSpecies = async (name) => {
   try {
     const response = await axios.get(`${EVOL_URL}/${name.toLowerCase()}`);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     throw new Error(error.response?.data?.message || 'Pokémon species not found!');
   }
 };
 
 /** Fetch evolution chain data by URL. */
-export const getEvolutionChain = async (url: string): Promise<any> => {
+export const getEvolutionChain = async (url) => {
   try {
     const response = await axios.get(url);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     throw new Error(error.response?.data?.message || 'Evolution chain not found!');
   }
 };
 
 /** Parse the evolution chain to get the full list of evolutions. */
-const parseEvolutionChain = (chain: EvolutionNode): { name: string; url: string }[] => {
-  const evolutions: { name: string; url: string }[] = [];
+const parseEvolutionChain = (chain) => {
+  const evolutions = [];
 
-  const traverseChain = (node: EvolutionNode): void => {
+  const traverseChain = (node) => {
     evolutions.push({
       name: node.species.name,
       url: node.species.url,
@@ -126,13 +113,13 @@ const parseEvolutionChain = (chain: EvolutionNode): { name: string; url: string 
 };
 
 /** Fetch the complete evolution chain for a given Pokémon by name. */
-export const getPokemonEvolutionChain = async (name: string): Promise<{ name: string; url: string }[]> => {
+export const getPokemonEvolutionChain = async (name) => {
   try {
     const species = await getPokemonSpecies(name);
     const evolutionChainUrl = species.evolution_chain.url;
     const evolutionChainData = await getEvolutionChain(evolutionChainUrl);
     return parseEvolutionChain(evolutionChainData.chain);
-  } catch (error: any) {
+  } catch (error) {
     throw new Error(error.response?.data?.message || error.message);
   }
 };

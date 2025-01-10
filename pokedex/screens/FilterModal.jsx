@@ -1,27 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { styled } from 'nativewind';
 import '../global.css';
 
-interface FilterModalProps {
-  isVisible: boolean;
-  toggleFilter: () => void;
-  imgType: string;
-  setImgType: (value: string) => void;
-  spriteType: string;
-  setSpriteType: (value: string) => void;
-  formType: string;
-  setFormType: (value: string) => void;
-  megaType: string;
-  setMegaType: (value: string) => void;
-  genderType: string;
-  setGenderType: (value: string) => void;
-  regionType: string;
-  setRegionType: (value: string) => void;
-}
-
-const FilterModal: React.FC<FilterModalProps> = ({
+const FilterModal = ({
   isVisible,
   toggleFilter,
   imgType,

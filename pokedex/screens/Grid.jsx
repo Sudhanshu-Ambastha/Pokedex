@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  useWindowDimensions
-} from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, FlatList, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { searchIcon, filterIcon } from '../constants/icons';
 import FilterModal from './FilterModal';
-import { getPokemonList, getSpriteUrl } from '../../constants/api';
+import { getPokemonList, getSpriteUrl } from '../constants/api';
+import axios from 'axios';
+import '../global.css';
 
-const PokemonGrid: React.FC = () => {
+const PokemonGrid = () => {
   const { width: screenWidth } = useWindowDimensions();
-  const [pokemonList, setPokemonList] = useState<any[]>([]);
-  const [filteredPokemon, setFilteredPokemon] = useState<any[]>([]);
+  const [pokemonList, setPokemonList] = useState([]);
+  const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [imgType, setImgType] = useState('GIF');
   const [spriteType, setSpriteType] = useState('normal');
@@ -37,37 +31,37 @@ const PokemonGrid: React.FC = () => {
     applyFilters();
   }, [searchText, imgType, spriteType, formType, megaType, genderType, regionType]);
 
-  const fetchPokemonList = async () => {
-    try {
-      const results = await getPokemonList();
-      const pokemonWithSprites = await Promise.all(
-        results.map(async (pokemon: any) => {
-          let spriteUrl;
-          try {
-            spriteUrl = await getSpriteUrl(
-              pokemon,
-              imgType,
-              spriteType,
-              formType
-            );
-            if (!spriteUrl) throw new Error('Primary sprite URL failed');
-          } catch {
-            spriteUrl = `https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/home/${pokemon.id}.png`;
-          }
-          return {
-            ...pokemon,
-            spriteUrl,
-          };
-        })
-      );
-      setPokemonList(pokemonWithSprites);
-      setFilteredPokemon(pokemonWithSprites);
-    } catch (error) {
-      console.error('Error fetching Pokémon list:', error);
-    }
+  const fetchPokemonList = () => {
+    axios.get('API_ENDPOINT_HERE') 
+      .then(results => {
+        const pokemonWithSpritesPromises = results.data?.map((pokemon) => {
+          return getSpriteUrl(pokemon, imgType, spriteType, formType)
+            .then((spriteUrl) => {
+              return {
+                ...pokemon,
+                spriteUrl,
+              };
+            })
+            .catch(() => {
+              const fallbackUrl = `https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/home/${pokemon.id}.png`;
+              return {
+                ...pokemon,
+                spriteUrl: fallbackUrl,
+              };
+            });
+        }) ?? [];
+        return Promise.all(pokemonWithSpritesPromises);
+      })
+      .then(pokemonWithSprites => {
+        setPokemonList(pokemonWithSprites);
+        setFilteredPokemon(pokemonWithSprites);
+      })
+      .catch(error => {
+        console.error('Error fetching Pokémon list:', error);
+      });
   };
 
-  const handleSearch = (text: string) => {
+  const handleSearch = (text) => {
     setSearchText(text);
   };
 
@@ -81,7 +75,7 @@ const PokemonGrid: React.FC = () => {
     }
 
     if (regionType && regionType !== 'all') {
-      const regionIndices: Record<string, [number, number]> = {
+      const regionIndices = {
         kanto: [1, 151],
         johto: [152, 251],
         hoenn: [252, 386],
@@ -105,11 +99,11 @@ const PokemonGrid: React.FC = () => {
     setFilterVisible(!isFilterVisible);
   };
 
-  const handlePokemonPress = (pokemon: any) => {
+  const handlePokemonPress = (pokemon) => {
     navigation.navigate('PokeData', { pokemonName: pokemon.name });
   };
 
-  const renderPokemon = ({ item }: { item: any }) => (
+  const renderPokemon = ({ item }) => (
     <TouchableOpacity
       onPress={() => handlePokemonPress(item)}
       className="bg-gray-200 p-4 m-1 rounded flex-1 items-center justify-center"
