@@ -1,97 +1,68 @@
 import axios from 'axios';
 
 const BASE_URL = 'https://pokeapi-proxy.freecodecamp.rocks/api/pokemon';
-const SPRITE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/';
-const BACKUP_SPRITE_URL = 'https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/home/';
-const GENERATION_8_URL = 'https://github.com/dokkanart/swsh-gifs/blob/master/Generation%208/';
 const EVOL_URL = 'https://pokeapi.co/api/v2/pokemon-species';
+const SPRITE_URL = 'https://raw.githubusercontent.com/Sudhanshu-Ambastha/Pokemon-3D-Models/main/PokeData.json';
 
 /** Fetch the list of all Pokémon. */
-export const getPokemonList = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}?limit=1000`); // Adjust limit as needed
-    return response.data.results;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Failed to fetch Pokémon list');
-  }
+export const getPokemonList = () => {
+  return axios.get(`${BASE_URL}?limit=1000`) // Adjust limit as needed
+    .then(response => response.data.results)
+    .catch(error => {
+      throw new Error(error.response?.data?.message || 'Failed to fetch Pokémon list');
+    });
 };
 
 /** Fetch Pokémon data by name. */
-export const getPokemonByName = async (name) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/${name.toLowerCase()}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Pokémon not found!');
-  }
+export const getPokemonByName = (name) => {
+  return axios.get(`${BASE_URL}/${name.toLowerCase()}`)
+    .then(response => response.data)
+    .catch(error => {
+      throw new Error(error.response?.data?.message || 'Pokémon not found!');
+    });
 };
 
 /** Fetch Pokémon data by ID. */
-export const getPokemonById = async (id) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/${id}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Pokémon not found!');
-  }
+export const getPokemonById = (id) => {
+  return axios.get(`${BASE_URL}/${id}`)
+    .then(response => response.data)
+    .catch(error => {
+      throw new Error(error.response?.data?.message || 'Pokémon not found!');
+    });
 };
 
-/** Generate the Pokémon sprite URL based on selected types and forms, with backups. */
-export const getSpriteUrl = (
-  pokemonData,
-  imgType,
-  formType = null,
-  megaType = null,
-  genderType = null
-) => {
-  if (!pokemonData) return null;
-
-  const form = formType === 'alola' ? '-alola' : '';
-  const gender = genderType === 'female' ? '-f' : '';
-
-  switch (imgType) {
-    case 'GIF':
-      switch (megaType) {
-        case 'GMax':
-          return `${GENERATION_8_URL}${pokemonData.id}-gigantamax.gif`;
-        case 'primal':
-          return `${SPRITE_URL}${pokemonData.id}-primal.gif`;
-        case 'megax':
-          return `${SPRITE_URL}${pokemonData.id}-megax.gif`;
-        case 'megay':
-          return `${SPRITE_URL}${pokemonData.id}-megay.gif`;
-        case 'mega':
-          return `${SPRITE_URL}${pokemonData.id}-mega.gif`;
-        default:
-          return `${SPRITE_URL}${pokemonData.id}${form}${gender}.gif`;
+/** Fetch sprite data from Poke3DAPI */
+export const getSpriteUrl = (pokemonId) => {
+  return axios.get(SPRITE_URL)
+    .then(response => {
+      const pokemonData = response.data.find(pokemon => pokemon.id === pokemonId);
+      if (pokemonData) {
+        return pokemonData.spriteUrl;
+      } else {
+        throw new Error('Sprite not found!');
       }
-    case 'PNG':
-      return `${BACKUP_SPRITE_URL}${pokemonData.id}.png`;
-    case 'Low':
-      return pokemonData.sprites.front_default;
-    default:
-      return pokemonData.sprites.front_default;
-  }
+    })
+    .catch(error => {
+      throw new Error(error.message || 'Failed to fetch sprite data');
+    });
 };
 
 /** Fetch Pokémon species data. */
-export const getPokemonSpecies = async (name) => {
-  try {
-    const response = await axios.get(`${EVOL_URL}/${name.toLowerCase()}`);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Pokémon species not found!');
-  }
+export const getPokemonSpecies = (name) => {
+  return axios.get(`${EVOL_URL}/${name.toLowerCase()}`)
+    .then(response => response.data)
+    .catch(error => {
+      throw new Error(error.response?.data?.message || 'Pokémon species not found!');
+    });
 };
 
 /** Fetch evolution chain data by URL. */
-export const getEvolutionChain = async (url) => {
-  try {
-    const response = await axios.get(url);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Evolution chain not found!');
-  }
+export const getEvolutionChain = (url) => {
+  return axios.get(url)
+    .then(response => response.data)
+    .catch(error => {
+      throw new Error(error.response?.data?.message || 'Evolution chain not found!');
+    });
 };
 
 /** Parse the evolution chain to get the full list of evolutions. */
@@ -113,13 +84,14 @@ const parseEvolutionChain = (chain) => {
 };
 
 /** Fetch the complete evolution chain for a given Pokémon by name. */
-export const getPokemonEvolutionChain = async (name) => {
-  try {
-    const species = await getPokemonSpecies(name);
-    const evolutionChainUrl = species.evolution_chain.url;
-    const evolutionChainData = await getEvolutionChain(evolutionChainUrl);
-    return parseEvolutionChain(evolutionChainData.chain);
-  } catch (error) {
-    throw new Error(error.response?.data?.message || error.message);
-  }
+export const getPokemonEvolutionChain = (name) => {
+  return getPokemonSpecies(name)
+    .then(species => {
+      const evolutionChainUrl = species.evolution_chain.url;
+      return getEvolutionChain(evolutionChainUrl);
+    })
+    .then(evolutionChainData => parseEvolutionChain(evolutionChainData.chain))
+    .catch(error => {
+      throw new Error(error.response?.data?.message || error.message);
+    });
 };
