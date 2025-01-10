@@ -1,9 +1,20 @@
-import React from "react";
-import { StyleSheet, Text } from "react-native";
-import '../global.css';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useRouter } from 'expo-router';
+import { Welcome, PokemonGrid, PokeData, Evolutions } from '../screens';
 
-export default function App() {
+const StackNavigator = createNativeStackNavigator(); 
+
+const Home = () => {
+  const router = useRouter();
+
   return (
-    <Text className="text-8xl text-red-600">Hello World!</Text>
+    <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <StackNavigator.Screen name="Welcome" component={Welcome} />
+      <StackNavigator.Screen name="PokemonGrid" component={PokemonGrid} />
+      <StackNavigator.Screen name="Evolutions" component={Evolutions} />
+      <StackNavigator.Screen name="PokeData" component={PokeData} />
+    </StackNavigator.Navigator>
   );
-}
+};
+
+export default Home;
