@@ -39,15 +39,19 @@ Additionally, sprite images are sourced from:
 You can test the application live [here](https://onecompiler.com/html/42swhnzxd).
 
 ## Installation
+[React Native Expo](https://reactnative.dev/docs/environment-setup)
+[NativeWind](https://www.nativewind.dev/getting-started/expo-router)
 
 To run this project locally, follow these steps:
 
 1. Clone this repository:
-   ```bash
+   ```
    git clone "https://github.com/Sudhanshu-Ambastha/Pokedex"
    ```
 2. Open `index.html` in your web browser.   
-
+   ```
+   npx expo start --tunnel
+   ```
 
 ## Acknowledgments
 
