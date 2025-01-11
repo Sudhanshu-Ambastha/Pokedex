@@ -50,7 +50,7 @@ To run this project locally, follow these steps:
    ```
 2. Open `index.html` in your web browser.   
    ```
-   npm install expo-router axios react-navigation react-navigation-stack @react-navigation/stack react-native-screens react-native-safe-area-context  @react-native-picker/picker
+   npm install expo-router axios react-navigation react-navigation-stack @react-navigation/stack react-native-screens react-native-safe-area-context @react-native-picker/picker
    ```
    for web:-
    ```
