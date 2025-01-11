@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Echo, Romeo, shinyRomeo, Oscar, Exclamation, Zero } from '../constants/icons';
+import { Echo, Romeo, shinyRomeo, Oscar, Exclamation, Zero } from '../../constants/icons';
 import { useNavigation } from '@react-navigation/native';
-import '../global.css';
+
 
 const Error = ({ onRetry }) => {
   const navigation = useNavigation();

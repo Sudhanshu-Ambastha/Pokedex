@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, FlatList, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { searchIcon, filterIcon } from '../constants/icons';
+import { searchIcon, filterIcon } from '../../constants/icons';
 import FilterModal from './FilterModal';
-import { getPokemonList, getSpriteUrl } from '../constants/api';
+import { getPokemonList, getSpriteUrl } from '../../constants/api';
 import axios from 'axios';
-import '../global.css';
 
 const PokemonGrid = () => {
   const { width: screenWidth } = useWindowDimensions();
@@ -17,7 +16,7 @@ const PokemonGrid = () => {
   const [formType, setFormType] = useState('standard');
   const [megaType, setMegaType] = useState('regular');
   const [genderType, setGenderType] = useState('male');
-  const [regionType, setRegionType] = useState('all');
+  const [regionType, setRegionType] = useState('kanto');
   const [isFilterVisible, setFilterVisible] = useState(false);
   const navigation = useNavigation();
 
@@ -46,7 +45,7 @@ const PokemonGrid = () => {
             };
           })
           .catch(() => {
-            const fallbackUrl = `https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/home/${id}.png`;
+            const fallbackUrl = ``;
             return {
               ...pokemon,
               id: parseInt(id),

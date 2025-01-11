@@ -14,5 +14,5 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "nativewind-env.d.ts"
-, "screens/Welcome.jsx", "screens/PokeData.jsx", "screens/FilterModal.jsx", "screens/Grid.jsx", "screens/Evol.jsx", "screens/Error.jsx", "app/index.jsx", "constants/api.js"  ]
+, "app/screens/Welcome.jsx", "app/screens/PokeData.jsx", "app/screens/FilterModal.jsx", "app/screens/Grid.jsx", "app/screens/Evol.jsx", "app/screens/Error.jsx", "app/index.jsx", "constants/api.js"  ]
 }

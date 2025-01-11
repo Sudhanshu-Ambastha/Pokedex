@@ -75,7 +75,7 @@ export const getSpriteUrl = (pokemonId) => {
     .then(response => {
       const pokemonData = response.data.find(pokemon => pokemon.id === pokemonId);
       if (pokemonData) {
-        return pokemonData.spriteUrl; // Ensure this matches the JSON structure
+        return console.log(pokemonData.spriteUrl); // Ensure this matches the JSON structure
       } else {
         throw new Error('Sprite not found!');
       }

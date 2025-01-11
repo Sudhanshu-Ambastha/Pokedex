@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
-import { chevronLeft, homeIcon, chevronRight } from '../constants/icons';
+import { chevronLeft, homeIcon, chevronRight } from '../../constants/icons';
 import Error from './Error';
-import { getEvolutionChain, getSpriteUrl } from '../constants/api';
-import '../global.css';
+import { getEvolutionChain, getSpriteUrl } from '../../constants/api';
+
 
 const EvolutionPage = ({ route, navigation }) => {
   const [evolutionData, setEvolutionData] = useState([]);

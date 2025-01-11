@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity} from 'react-native';
 import { useRoute } from '@react-navigation/native'; 
-import { getPokemonStats } from '../constants/api'; 
-import { searchIcon, homeIcon, filterIcon, chevronLeft, chevronRight } from '../constants/icons';
+import { getPokemonStats } from '../../constants/api'; 
+import { searchIcon, homeIcon, filterIcon, chevronLeft, chevronRight } from '../../constants/icons';
 
 const PokeData = () => {
   const route = useRoute();

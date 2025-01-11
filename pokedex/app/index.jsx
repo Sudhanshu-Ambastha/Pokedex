@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useRouter } from 'expo-router';
-import { Welcome, PokemonGrid, PokeData, Evolutions } from '../screens';
+import { Welcome, PokemonGrid, PokeData, Evolutions } from './screens';
 
 const StackNavigator = createNativeStackNavigator(); 
 
