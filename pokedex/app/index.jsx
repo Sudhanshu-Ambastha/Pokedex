@@ -8,7 +8,7 @@ const Home = () => {
   const router = useRouter();
 
   return (
-    <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
+    <StackNavigator.Navigator screenOptions={{ headerShown: true }}>
       <StackNavigator.Screen name="Welcome" component={Welcome} />
       <StackNavigator.Screen name="PokemonGrid" component={PokemonGrid} />
       <StackNavigator.Screen name="Evolutions" component={Evolutions} />

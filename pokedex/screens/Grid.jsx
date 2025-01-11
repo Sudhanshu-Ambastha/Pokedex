@@ -32,34 +32,38 @@ const PokemonGrid = () => {
   }, [searchText, imgType, spriteType, formType, megaType, genderType, regionType]);
 
   const fetchPokemonList = () => {
-    axios.get('API_ENDPOINT_HERE') 
-      .then(results => {
-        const pokemonWithSpritesPromises = results.data?.map((pokemon) => {
-          return getSpriteUrl(pokemon, imgType, spriteType, formType)
-            .then((spriteUrl) => {
-              return {
-                ...pokemon,
-                spriteUrl,
-              };
-            })
-            .catch(() => {
-              const fallbackUrl = `https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/home/${pokemon.id}.png`;
-              return {
-                ...pokemon,
-                spriteUrl: fallbackUrl,
-              };
-            });
-        }) ?? [];
-        return Promise.all(pokemonWithSpritesPromises);
-      })
-      .then(pokemonWithSprites => {
-        setPokemonList(pokemonWithSprites);
-        setFilteredPokemon(pokemonWithSprites);
-      })
-      .catch(error => {
-        console.error('Error fetching Pokémon list:', error);
+  getPokemonList() // Use the getPokemonList function from api.js
+    .then(results => {
+      const pokemonWithSpritesPromises = results.map((pokemon) => {
+        // Extract the Pokémon ID from the URL
+        const id = pokemon.url.split('/').filter(Boolean).pop();
+        return getSpriteUrl(id) // Fetch the sprite URL
+          .then((spriteUrl) => {
+            return {
+              ...pokemon,
+              id: parseInt(id), // Add the ID to the Pokémon object
+              spriteUrl, // Add the sprite URL
+            };
+          })
+          .catch(() => {
+            const fallbackUrl = `https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/home/${id}.png`;
+            return {
+              ...pokemon,
+              id: parseInt(id),
+              spriteUrl: fallbackUrl, // Use a fallback URL if the sprite fetch fails
+            };
+          });
       });
-  };
+      return Promise.all(pokemonWithSpritesPromises);
+    })
+    .then(pokemonWithSprites => {
+      setPokemonList(pokemonWithSprites);
+      setFilteredPokemon(pokemonWithSprites);
+    })
+    .catch(error => {
+      console.error('Error fetching Pokémon list:', error);
+    });
+}; 
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -100,7 +104,7 @@ const PokemonGrid = () => {
   };
 
   const handlePokemonPress = (pokemon) => {
-    navigation.navigate('PokeData', { pokemonName: pokemon.name });
+  navigation.navigate('PokeData', { pokemonName: pokemon.name, pokemonId: pokemon.id });
   };
 
   const renderPokemon = ({ item }) => (

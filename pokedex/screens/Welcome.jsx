@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Error } from './index'; 
-import { Pokedex, loading, WTP, loadingText, errorIcon } from '../constants/icons';
-import '../global.css';
+import  Error  from './Error';
+import { WTP, loading, loadingText, Pokedex, errorIcon } from '../constants/icons';
 
 const Welcome = () => {
   const navigation = useNavigation();
@@ -17,14 +16,14 @@ const Welcome = () => {
       }
     }, 20000); // 20-second timeout
 
-    return () => clearTimeout(timeoutId); 
+    return () => clearTimeout(timeoutId);
   }, [isLoading, navigation]);
 
   useEffect(() => {
     const handleNavigationAfterLoad = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); 
-      setIsLoading(false); 
-      navigation.navigate("PokemonGrid");
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setIsLoading(false);
+      navigation.navigate('PokemonGrid');
     };
 
     if (isLoading) {
@@ -34,14 +33,14 @@ const Welcome = () => {
 
   if (isLoading) {
     return (
-      <View className="w-full flex-1 justify-center items-center bg-gray-100">
-        <Image source={WTP} className="h-12 w-80" />
-        <Text className="text-lg font-regular text-secondary text-center mt-4">
+      <View className="flex-1 items-center justify-center bg-white">
+        <Image source={WTP} className="w-[350px] h-[50px]" />
+        <Text className="font-regular text-lg text-secondary text-center mt-4">
           Discover and learn about Pokemon
         </Text>
-        <Image source={loading} className="w-32 h-32 mt-8 mb-4" />
-        <Image source={loadingText} className="w-24 h-10" />
-        <Image source={Pokedex} className="w-[364px] h-[550px] -mt-20" />
+        <Image source={loading} className="w-[130px] h-[130px] mt-[210px] mb-[10px] mx-[10px] z-10" />
+        <Image source={loadingText} className="w-[100px] h-[40px] mt-[123px] mx-[10px] z-10" />
+        <Image source={Pokedex} className="w-[364px] h-[550px] mt-[-478px] mb-[10px] mx-[6px] z-0" />
       </View>
     );
   }

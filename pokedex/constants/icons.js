@@ -5,19 +5,20 @@ import left from "../assets/icons/left.png";
 import chevronLeft from '../assets/icons/chevron-left.png';
 import chevronRight from '../assets/icons/chevron-right.png';
 import homeIcon from "../assets/icons/homeIcon.png";
-export const loading = require('../assets/icons/Loading.gif');
-export const Pokedex = require('../assets/icons/Pokedex.png');
-export const WTP = require('../assets/icons/WTP.png') ;
-export const loadingText = require('../assets/icons/LoadingText.png') ;
+import loading from '../assets/icons/Loading.gif';
+import Pokedex from '../assets/icons/Pokedex.png';
+import WTP from '../assets/icons/WTP.png' ;
+import loadingText from '../assets/icons/LoadingText.png';
 
 // Error page icons
-export const Echo = require('../assets/Error/unown-echo.gif');
-export const Romeo = require('../assets/Error/unown-romeo.gif');
-export const shinyRomeo = require('../assets/Error/unown-romeo2.gif');
-export const Oscar = require('../assets/Error/unown-oscar.gif');
-export const Exclamation = require('../assets/Error/unown-exclamation.gif');
-export const Zero = require('../assets/Error/electrode.gif');
+import Echo from '../assets/Error/unown-echo.gif';
+import Romeo from '../assets/Error/unown-romeo.gif';
+import shinyRomeo from '../assets/Error/unown-romeo2.gif';
+import Oscar from '../assets/Error/unown-oscar.gif';
+import Exclamation from '../assets/Error/unown-exclamation.gif';
+import Zero from '../assets/Error/electrode.gif';
 
 // Export remaining icons as needed
-export { searchIcon, filterIcon, left, chevronLeft, chevronRight, homeIcon };
+export {searchIcon, filterIcon, left, chevronLeft, chevronRight, homeIcon, loading, Pokedex, WTP, loadingText, 
+    Echo, Romeo, shinyRomeo, Oscar, Exclamation, Zero};
 

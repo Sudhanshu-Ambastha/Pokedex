@@ -13,31 +13,69 @@ export const getPokemonList = () => {
     });
 };
 
-/** Fetch Pokémon data by name. */
-export const getPokemonByName = (name) => {
-  return axios.get(`${BASE_URL}/${name.toLowerCase()}`)
+/** Fetch Pokémon data by name or ID. */
+export const getPokemonByNameOrId = (nameOrId) => {
+  return axios.get(`${BASE_URL}/${nameOrId.toLowerCase()}`)
     .then(response => response.data)
     .catch(error => {
       throw new Error(error.response?.data?.message || 'Pokémon not found!');
     });
 };
 
-/** Fetch Pokémon data by ID. */
-export const getPokemonById = (id) => {
-  return axios.get(`${BASE_URL}/${id}`)
-    .then(response => response.data)
-    .catch(error => {
-      throw new Error(error.response?.data?.message || 'Pokémon not found!');
-    });
+/** Fetch Pokémon stats (hp, attack, defense, etc.) by name or ID. */
+export const getPokemonStats = async (nameOrId) => {
+  try {
+    const pokemonData = await getPokemonByNameOrId(nameOrId);
+
+    // Extract stats
+    const stats = {
+      hp: pokemonData.stats[0].base_stat,
+      attack: pokemonData.stats[1].base_stat,
+      defense: pokemonData.stats[2].base_stat,
+      specialAttack: pokemonData.stats[3].base_stat,
+      specialDefense: pokemonData.stats[4].base_stat,
+      speed: pokemonData.stats[5].base_stat,
+    };
+
+    // Extract other details
+    const pokemonDetails = {
+      name: pokemonData.name,
+      id: pokemonData.id,
+      weight: pokemonData.weight,
+      height: pokemonData.height,
+      spriteUrl: pokemonData.sprites.front_default,
+      types: pokemonData.types.map(typeInfo => typeInfo.type.name),
+    };
+
+    return { ...pokemonDetails, stats };
+  } catch (error) {
+    throw new Error(error.message || 'Failed to fetch Pokémon stats');
+  }
 };
 
-/** Fetch sprite data from Poke3DAPI */
+/** Fetch Pokémon types and their icons. */
+export const getPokemonTypes = async (nameOrId) => {
+  try {
+    const pokemonData = await getPokemonByNameOrId(nameOrId);
+
+    // Map types to their icons
+    const types = pokemonData.types.map(typeInfo => ({
+      name: typeInfo.type.name,
+      iconUrl: `https://github.com/Sudhanshu-Ambastha/Pokedex/tree/main/PokemonTypes/${typeInfo.type.name.toUpperCase()}.png`,
+    }));
+
+    return types;
+  } catch (error) {
+    throw new Error(error.message || 'Failed to fetch Pokémon types');
+  }
+};
+
 export const getSpriteUrl = (pokemonId) => {
   return axios.get(SPRITE_URL)
     .then(response => {
       const pokemonData = response.data.find(pokemon => pokemon.id === pokemonId);
       if (pokemonData) {
-        return pokemonData.spriteUrl;
+        return pokemonData.spriteUrl; // Ensure this matches the JSON structure
       } else {
         throw new Error('Sprite not found!');
       }
