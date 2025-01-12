@@ -155,7 +155,7 @@ const PokemonGrid = () => {
           onChangeText={handleSearch}
         />
         <TouchableOpacity className="bg-cyan-400 p-2 rounded ml-2">
-          {/* <Image source={searchIcon} className="w-5 h-5" />         */}
+          <Image source={searchIcon} />        
         </TouchableOpacity>
       </View>
       <FlatList
