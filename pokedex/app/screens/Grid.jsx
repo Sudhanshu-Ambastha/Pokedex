@@ -15,7 +15,7 @@ const PokemonGrid = () => {
   const [formType, setFormType] = useState('standard');
   const [megaType, setMegaType] = useState('regular');
   const [genderType, setGenderType] = useState('male');
-  const [regionType, setRegionType] = useState('kanto');
+  const [regionType, setRegionType] = useState('all');
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const navigation = useNavigation();
@@ -32,7 +32,7 @@ const PokemonGrid = () => {
 
   useEffect(() => {
   if (pokemonList.length > 0) {
-    setIsDataLoaded(true); // Set the data as loaded when the pokemonList is populated
+    setIsDataLoaded(true); 
   }
 }, [pokemonList]);
 
@@ -101,7 +101,7 @@ const PokemonGrid = () => {
         galar: [899, 1000],
         paldea: [1001, 1075],
       };
-      const [start, end] = regionIndices[regionType] || [1, 151]; // Default to kanto range
+      const [start, end] = regionIndices[regionType] || [1, 151]; 
       if (start !== undefined && end !== undefined) {
         filtered = filtered.filter((pokemon) => pokemon.id >= start && pokemon.id <= end);
       }
@@ -115,7 +115,7 @@ const PokemonGrid = () => {
   };
 
   const handlePokemonPress = (pokemon) => {
-    navigation.navigate('PokeData', { pokemonName: pokemon.name, pokemonId: pokemon.id });
+    navigation.navigate('PokeData', { pokemon }); 
   };
 
   const renderPokemon = ({ item }) => (

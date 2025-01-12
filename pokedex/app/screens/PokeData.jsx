@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity} from 'react-native';
-import { useRoute } from '@react-navigation/native'; 
-import { getPokemonStats } from '../../constants/api'; 
-import { searchIcon, homeIcon, filterIcon, chevronLeft, chevronRight } from '../../constants/icons';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native'; // Added useNavigation here
+import { getPokemonStats } from '../../constants/api';
+import { homeIcon } from '../../constants/icons';
 
 const PokeData = () => {
   const route = useRoute();
-  const navigation = useNavigation();
-  const { pokemonName } = route.params; 
+  const navigation = useNavigation(); 
+  const { pokemon } = route.params;
 
   const [pokemonData, setPokemonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!pokemonName) {
+    if (!pokemon?.name) {
       setError('Pokémon name is required.');
       setLoading(false);
       return;
@@ -22,7 +22,7 @@ const PokeData = () => {
 
     const fetchPokemonData = async () => {
       try {
-        const data = await getPokemonStats(pokemonName);
+        const data = await getPokemonStats(pokemon.name);
         setPokemonData(data);
       } catch (err) {
         setError(err.message);
@@ -32,7 +32,7 @@ const PokeData = () => {
     };
 
     fetchPokemonData();
-  }, [pokemonName]);
+  }, [pokemon?.name]);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -93,7 +93,7 @@ const PokeData = () => {
 
       <TouchableOpacity onPress={handleEvolutionClick}>
         <Text>Check Evolution</Text>
-      </TouchableOpacity> 
+      </TouchableOpacity>
     </View>
   );
 };
