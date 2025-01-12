@@ -1,10 +1,10 @@
 // General icons
-import searchIcon from "../assets/icons/search.png";
+import searchIcon from "../assets/icons/Search.svg";
 import filterIcon from "../assets/icons/filter.png";
-import left from "../assets/icons/left.png";
-import chevronLeft from '../assets/icons/chevron-left.png';
-import chevronRight from '../assets/icons/chevron-right.png';
-import homeIcon from "../assets/icons/homeIcon.png";
+import left from "../assets/icons/Left.svg";
+import chevronLeft from '../assets/icons/ChevronLeft.svg';
+import chevronRight from '../assets/icons/ChevronRight.svg';
+import homeIcon from "../assets/icons/HomeIcon.svg";
 import loading from '../assets/icons/Loading.svg';
 import Pokedex from '../assets/icons/Pokedex.png';
 import WTP from '../assets/icons/WTP.png' ;
