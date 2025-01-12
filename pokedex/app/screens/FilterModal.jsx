@@ -90,6 +90,7 @@ const FilterModal = ({
           onValueChange={(itemValue) => setRegionType(itemValue)}
           className="h-12 w-full mb-5"
         >
+          <Picker.Item label="All" value="all" />
           <Picker.Item label="Kanto" value="kanto" />
           <Picker.Item label="Johto" value="johto" />
           <Picker.Item label="Hoenn" value="hoenn" />
@@ -99,7 +100,6 @@ const FilterModal = ({
           <Picker.Item label="Alola" value="alola" />
           <Picker.Item label="Galar" value="galar" />
           <Picker.Item label="Paldea" value="paldea" />
-          <Picker.Item label="All" value="all" />
         </Picker>
 
         <TouchableOpacity

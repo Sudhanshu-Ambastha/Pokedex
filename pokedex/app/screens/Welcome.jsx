@@ -10,28 +10,28 @@ const Welcome = () => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     if (isLoading) {
-  //       setIsLoading(false);
-  //       navigation.navigate('Error', { message: 'Loading took too long. Please retry.' });
-  //     }
-  //   }, 20000); // 20-second timeout
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (isLoading) {
+        setIsLoading(false);
+        navigation.navigate('Error', { message: 'Loading took too long. Please retry.' });
+      }
+    }, 20000); // 20-second timeout
 
-  //   return () => clearTimeout(timeoutId);
-  // }, [isLoading, navigation]);
+    return () => clearTimeout(timeoutId);
+  }, [isLoading, navigation]);
 
-  // useEffect(() => {
-  //   const handleNavigationAfterLoad = async () => {
-  //     await new Promise((resolve) => setTimeout(resolve, 2000));
-  //     setIsLoading(false);
-  //     navigation.navigate('PokemonGrid');
-  //   };
+  useEffect(() => {
+    const handleNavigationAfterLoad = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setIsLoading(false);
+      navigation.navigate('PokemonGrid');
+    };
 
-  //   if (isLoading) {
-  //     handleNavigationAfterLoad();
-  //   }
-  // }, [isLoading, navigation]);
+    if (isLoading) {
+      handleNavigationAfterLoad();
+    }
+  }, [isLoading, navigation]);
 
   if (isLoading) {
     return (

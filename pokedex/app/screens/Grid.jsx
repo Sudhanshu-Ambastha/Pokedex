@@ -3,8 +3,7 @@ import { View, Text, TextInput, Image, TouchableOpacity, FlatList, useWindowDime
 import { useNavigation } from '@react-navigation/native';
 import { searchIcon, filterIcon } from '../../constants/icons';
 import FilterModal from './FilterModal';
-import { getPokemonList, getSpriteUrl } from '../../constants/api';
-import axios from 'axios';
+import { getPokemonList, getPokemonSprite, getPokemonStats, getPokemonTypes } from '../../constants/api';
 
 const PokemonGrid = () => {
   const { width: screenWidth } = useWindowDimensions();
@@ -18,6 +17,7 @@ const PokemonGrid = () => {
   const [genderType, setGenderType] = useState('male');
   const [regionType, setRegionType] = useState('kanto');
   const [isFilterVisible, setFilterVisible] = useState(false);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const navigation = useNavigation();
 
   const numColumns = Math.floor(screenWidth / 100);
@@ -30,39 +30,51 @@ const PokemonGrid = () => {
     applyFilters();
   }, [searchText, imgType, spriteType, formType, megaType, genderType, regionType]);
 
+  useEffect(() => {
+  if (pokemonList.length > 0) {
+    setIsDataLoaded(true); // Set the data as loaded when the pokemonList is populated
+  }
+}, [pokemonList]);
+
   const fetchPokemonList = () => {
-  getPokemonList() // Use the getPokemonList function from api.js
-    .then(results => {
-      const pokemonWithSpritesPromises = results.map((pokemon) => {
-        // Extract the Pokémon ID from the URL
-        const id = pokemon.url.split('/').filter(Boolean).pop();
-        return getSpriteUrl(id) // Fetch the sprite URL
-          .then((spriteUrl) => {
-            return {
-              ...pokemon,
-              id: parseInt(id), // Add the ID to the Pokémon object
-              spriteUrl, // Add the sprite URL
-            };
-          })
-          .catch(() => {
-            const fallbackUrl = ``;
-            return {
-              ...pokemon,
-              id: parseInt(id),
-              spriteUrl: fallbackUrl, // Use a fallback URL if the sprite fetch fails
-            };
-          });
+    getPokemonList()
+      .then(results => {
+        const pokemonWithDetailsPromises = results.map((pokemon) => {
+          const id = pokemon.url.split('/').filter(Boolean).pop();
+          return Promise.all([
+            getPokemonSprite(id),
+            getPokemonStats(id),
+            getPokemonTypes(id),
+          ])
+            .then(([spriteUrl, stats, types]) => {
+              return {
+                ...pokemon,
+                id: parseInt(id),
+                spriteUrl,
+                stats,
+                types,
+              };
+            })
+            .catch(() => {
+              return {
+                ...pokemon,
+                id: parseInt(id),
+                spriteUrl: '', 
+                stats: {},
+                types: [],
+              };
+            });
+        });
+        return Promise.all(pokemonWithDetailsPromises);
+      })
+      .then(pokemonWithDetails => {
+        setPokemonList(pokemonWithDetails);
+        setFilteredPokemon(pokemonWithDetails);
+      })
+      .catch(error => {
+        console.error('Error fetching Pokémon list:', error);
       });
-      return Promise.all(pokemonWithSpritesPromises);
-    })
-    .then(pokemonWithSprites => {
-      setPokemonList(pokemonWithSprites);
-      setFilteredPokemon(pokemonWithSprites);
-    })
-    .catch(error => {
-      console.error('Error fetching Pokémon list:', error);
-    });
-}; 
+  };
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -89,7 +101,7 @@ const PokemonGrid = () => {
         galar: [899, 1000],
         paldea: [1001, 1075],
       };
-      const [start, end] = regionIndices[regionType] || [];
+      const [start, end] = regionIndices[regionType] || [1, 151]; // Default to kanto range
       if (start !== undefined && end !== undefined) {
         filtered = filtered.filter((pokemon) => pokemon.id >= start && pokemon.id <= end);
       }
@@ -103,7 +115,7 @@ const PokemonGrid = () => {
   };
 
   const handlePokemonPress = (pokemon) => {
-  navigation.navigate('PokeData', { pokemonName: pokemon.name, pokemonId: pokemon.id });
+    navigation.navigate('PokeData', { pokemonName: pokemon.name, pokemonId: pokemon.id });
   };
 
   const renderPokemon = ({ item }) => (
@@ -117,6 +129,16 @@ const PokemonGrid = () => {
         resizeMode="contain" 
       />
       <Text className="text-sm font-bold">{item.name}</Text>
+      {/* Display Pokémon types */}
+      <View className="flex-row">
+        {item.types.map(type => (
+          <Image 
+            key={type.name}
+            source={{ uri: type.iconUrl }} 
+            className="w-6 h-6 mr-1"
+          />
+        ))}
+      </View>
     </TouchableOpacity>
   );
 

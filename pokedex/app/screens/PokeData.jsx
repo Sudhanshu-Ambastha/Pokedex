@@ -6,6 +6,7 @@ import { searchIcon, homeIcon, filterIcon, chevronLeft, chevronRight } from '../
 
 const PokeData = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const { pokemonName } = route.params; 
 
   const [pokemonData, setPokemonData] = useState(null);
@@ -87,11 +88,12 @@ const PokeData = () => {
       </View>
 
       <TouchableOpacity onPress={() => navigation.navigate('PokemonGrid')}>
-              <Image source={homeIcon} />
-            </TouchableOpacity> 
-            <TouchableOpacity onPress={handleEvolutionClick}>
-             <Text>Check Evolution</Text>
+        <Image source={homeIcon} />
       </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleEvolutionClick}>
+        <Text>Check Evolution</Text>
+      </TouchableOpacity> 
     </View>
   );
 };

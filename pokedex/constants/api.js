@@ -1,25 +1,39 @@
-import axios from 'axios';
-
 const BASE_URL = 'https://pokeapi-proxy.freecodecamp.rocks/api/pokemon';
 const EVOL_URL = 'https://pokeapi.co/api/v2/pokemon-species';
-const SPRITE_URL = 'https://raw.githubusercontent.com/Sudhanshu-Ambastha/Pokemon-3D-Models/main/PokeData.json';
+// const SPRITE_URL = 'https://raw.githubusercontent.com/Sudhanshu-Ambastha/Pokemon-3D-Models/main/PokeData.json';
 
 /** Fetch the list of all Pokémon. */
-export const getPokemonList = () => {
-  return axios.get(`${BASE_URL}?limit=1000`) // Adjust limit as needed
-    .then(response => response.data.results)
-    .catch(error => {
-      throw new Error(error.response?.data?.message || 'Failed to fetch Pokémon list');
-    });
+export const getPokemonList = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}?limit=1000`);
+    if (!response.ok) throw new Error('Failed to fetch Pokémon list');
+    const data = await response.json();
+    return data.results || [];
+  } catch (error) {
+    console.error('Error fetching Pokémon list:', error.message);
+    throw new Error(error.message);
+  }
 };
 
 /** Fetch Pokémon data by name or ID. */
-export const getPokemonByNameOrId = (nameOrId) => {
-  return axios.get(`${BASE_URL}/${nameOrId.toLowerCase()}`)
-    .then(response => response.data)
-    .catch(error => {
-      throw new Error(error.response?.data?.message || 'Pokémon not found!');
-    });
+export const getPokemonByNameOrId = async (nameOrId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/${nameOrId.toLowerCase()}`);
+    if (!response.ok) throw new Error('Pokémon not found!');
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+/** Fetch Pokémon sprite by name or ID. */
+export const getPokemonSprite = async (nameOrId) => {
+  try {
+    const pokemonData = await getPokemonByNameOrId(nameOrId);
+    return pokemonData.sprites.front_default; // Default sprite URL
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 /** Fetch Pokémon stats (hp, attack, defense, etc.) by name or ID. */
@@ -27,7 +41,6 @@ export const getPokemonStats = async (nameOrId) => {
   try {
     const pokemonData = await getPokemonByNameOrId(nameOrId);
 
-    // Extract stats
     const stats = {
       hp: pokemonData.stats[0].base_stat,
       attack: pokemonData.stats[1].base_stat,
@@ -37,7 +50,6 @@ export const getPokemonStats = async (nameOrId) => {
       speed: pokemonData.stats[5].base_stat,
     };
 
-    // Extract other details
     const pokemonDetails = {
       name: pokemonData.name,
       id: pokemonData.id,
@@ -49,7 +61,7 @@ export const getPokemonStats = async (nameOrId) => {
 
     return { ...pokemonDetails, stats };
   } catch (error) {
-    throw new Error(error.message || 'Failed to fetch Pokémon stats');
+    throw new Error(error.message);
   }
 };
 
@@ -57,50 +69,35 @@ export const getPokemonStats = async (nameOrId) => {
 export const getPokemonTypes = async (nameOrId) => {
   try {
     const pokemonData = await getPokemonByNameOrId(nameOrId);
-
-    // Map types to their icons
-    const types = pokemonData.types.map(typeInfo => ({
+    return pokemonData.types.map(typeInfo => ({
       name: typeInfo.type.name,
       iconUrl: `https://github.com/Sudhanshu-Ambastha/Pokedex/tree/main/PokemonTypes/${typeInfo.type.name.toUpperCase()}.png`,
     }));
-
-    return types;
   } catch (error) {
-    throw new Error(error.message || 'Failed to fetch Pokémon types');
+    throw new Error(error.message);
   }
 };
 
-export const getSpriteUrl = (pokemonId) => {
-  return axios.get(SPRITE_URL)
-    .then(response => {
-      const pokemonData = response.data.find(pokemon => pokemon.id === pokemonId);
-      if (pokemonData) {
-        return console.log(pokemonData.spriteUrl); // Ensure this matches the JSON structure
-      } else {
-        throw new Error('Sprite not found!');
-      }
-    })
-    .catch(error => {
-      throw new Error(error.message || 'Failed to fetch sprite data');
-    });
-};
-
 /** Fetch Pokémon species data. */
-export const getPokemonSpecies = (name) => {
-  return axios.get(`${EVOL_URL}/${name.toLowerCase()}`)
-    .then(response => response.data)
-    .catch(error => {
-      throw new Error(error.response?.data?.message || 'Pokémon species not found!');
-    });
+export const getPokemonSpecies = async (name) => {
+  try {
+    const response = await fetch(`${EVOL_URL}/${name.toLowerCase()}`);
+    if (!response.ok) throw new Error('Pokémon species not found!');
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 /** Fetch evolution chain data by URL. */
-export const getEvolutionChain = (url) => {
-  return axios.get(url)
-    .then(response => response.data)
-    .catch(error => {
-      throw new Error(error.response?.data?.message || 'Evolution chain not found!');
-    });
+export const getEvolutionChain = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Evolution chain not found!');
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 /** Parse the evolution chain to get the full list of evolutions. */
@@ -122,14 +119,12 @@ const parseEvolutionChain = (chain) => {
 };
 
 /** Fetch the complete evolution chain for a given Pokémon by name. */
-export const getPokemonEvolutionChain = (name) => {
-  return getPokemonSpecies(name)
-    .then(species => {
-      const evolutionChainUrl = species.evolution_chain.url;
-      return getEvolutionChain(evolutionChainUrl);
-    })
-    .then(evolutionChainData => parseEvolutionChain(evolutionChainData.chain))
-    .catch(error => {
-      throw new Error(error.response?.data?.message || error.message);
-    });
+export const getPokemonEvolutionChain = async (name) => {
+  try {
+    const species = await getPokemonSpecies(name);
+    const evolutionChainData = await getEvolutionChain(species.evolution_chain.url);
+    return parseEvolutionChain(evolutionChainData.chain);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
