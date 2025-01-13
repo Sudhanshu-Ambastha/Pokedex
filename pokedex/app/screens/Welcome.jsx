@@ -15,15 +15,6 @@ const Welcome = () => {
     'PokeFont': require('../../assets/fonts/PokemonSolid.ttf'),
   });
 
-  // If fonts aren't loaded yet, show loading state
-  if (!fontsLoaded) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <Text className="font-Poke text-lg">Loading fonts...</Text>
-      </View>
-    );
-  }
-
   // Ensure hooks are called unconditionally
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -48,11 +39,20 @@ const Welcome = () => {
     }
   }, [isLoading, navigation]);
 
+  // If fonts aren't loaded yet, show loading state
+  if (!fontsLoaded) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <Text className="font-poke text-lg">Loading fonts...</Text>
+      </View>
+    );
+  }
+
   if (isLoading) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
         <Image source={WTP} className="w-[350px] h-[50px]" />
-        <Text className="font-Poke text-lg text-secondary text-center mt-4">
+        <Text className="font-poke text-lg text-secondary text-center mt-4">
           Discover and learn about Pokemon
         </Text>
         <Image source={loading} className="w-[130px] h-[130px] mt-[210px] mb-[10px] mx-[10px] z-10" />

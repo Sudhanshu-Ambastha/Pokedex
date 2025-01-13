@@ -1,12 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useRouter } from 'expo-router';
 import { Welcome, PokemonGrid, PokeData, Evolutions, Error } from './screens/index.js';
 
 const StackNavigator = createNativeStackNavigator(); 
 
 const Home = () => {
-  const router = useRouter();
-
   return (
     <StackNavigator.Navigator screenOptions={{ headerShown: true }}>
       <StackNavigator.Screen name="Welcome" component={Welcome} />

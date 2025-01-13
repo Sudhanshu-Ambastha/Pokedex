@@ -28,7 +28,7 @@ const Error = ({ onRetry }) => {
   return (
     <View className="flex-1 bg-gray-100 justify-center items-center">
       <View className="flex justify-center items-center mt-20 pb-40 bg-gray-100">
-        <Text className="text-3xl font-bold text-gray-400 font-poke">
+        <Text className="text-3xl text-gray-400 font-poke">
           E    r     r     o    r       !
         </Text>
 

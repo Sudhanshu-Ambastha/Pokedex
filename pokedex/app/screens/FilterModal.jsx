@@ -35,9 +35,9 @@ const FilterModal = ({
       onRequestClose={toggleFilter}
     >
       <View className="flex-1 bg-white p-5">
-        <Text className="text-2xl font-bold font-poke mb-5">Filter Options</Text>
+        <Text className="text-2xl font-poke mb-5">Filter Options</Text>
 
-        <Text className="mt-2 font-bold font-poke">Image Type</Text>
+        <Text className="mt-2 font-poke">Image Type</Text>
         <Picker
           selectedValue={imgType}
           onValueChange={(itemValue) => setImgType(itemValue)}
@@ -48,7 +48,7 @@ const FilterModal = ({
           <Picker.Item label="Low" value="Low" />
         </Picker>
 
-        <Text className="mt-2 font-bold font-poke">Sprite Type</Text>
+        <Text className="mt-2 font-poke">Sprite Type</Text>
         <Picker
           selectedValue={spriteType}
           onValueChange={(itemValue) => setSpriteType(itemValue)}
@@ -58,7 +58,7 @@ const FilterModal = ({
           <Picker.Item label="Shiny" value="shiny" />
         </Picker>
 
-        <Text className="mt-2 font-bold font-poke">Form Type</Text>
+        <Text className="mt-2 font-poke">Form Type</Text>
         <Picker
           selectedValue={formType}
           onValueChange={(itemValue) => setFormType(itemValue)}
@@ -68,7 +68,7 @@ const FilterModal = ({
           <Picker.Item label="Alola" value="alola" />
         </Picker>
 
-        <Text className="mt-2 font-bold font-poke">Mega Type</Text>
+        <Text className="mt-2 font-poke">Mega Type</Text>
         <Picker
           selectedValue={megaType}
           onValueChange={(itemValue) => setMegaType(itemValue)}
@@ -82,7 +82,7 @@ const FilterModal = ({
           <Picker.Item label="G-Max" value="gmax" />
         </Picker>
 
-        <Text className="mt-2 font-bold font-poke">Gender Type</Text>
+        <Text className="mt-2 font-poke">Gender Type</Text>
         <Picker
           selectedValue={genderType}
           onValueChange={(itemValue) => setGenderType(itemValue)}
@@ -92,7 +92,7 @@ const FilterModal = ({
           <Picker.Item label="Female" value="female" />
         </Picker>
 
-        <Text className="mt-2 font-bold font-poke">Region</Text>
+        <Text className="mt-2 font-poke">Region</Text>
         <Picker
           selectedValue={regionType}
           onValueChange={(itemValue) => setRegionType(itemValue)}
@@ -114,7 +114,7 @@ const FilterModal = ({
           className="p-3 bg-orange-500 rounded items-center mt-5"
           onPress={toggleFilter}
         >
-          <Text className="text-white font-bold font-poke">Close</Text>
+        <Text className="text-white font-poke">Close</Text>
         </TouchableOpacity>
       </View>
     </Modal>
