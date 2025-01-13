@@ -115,7 +115,7 @@ const PokemonGrid = () => {
   };
 
   const handlePokemonPress = (pokemon) => {
-    navigation.navigate('PokeData', { pokemon }); 
+    navigation.navigate('PokeData', { pokemon, pokemonList }); 
   };
 
   const renderPokemon = ({ item }) => (
