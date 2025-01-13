@@ -5,7 +5,7 @@ const StackNavigator = createNativeStackNavigator();
 
 const Home = () => {
   return (
-    <StackNavigator.Navigator screenOptions={{ headerShown: true }}>
+    <StackNavigator.Navigator screenOptions={{ headerShown: false }}>
       <StackNavigator.Screen name="Welcome" component={Welcome} />
       <StackNavigator.Screen name="PokemonGrid" component={PokemonGrid} />
       <StackNavigator.Screen name="PokeData" component={PokeData} />
