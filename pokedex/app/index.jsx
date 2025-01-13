@@ -11,8 +11,8 @@ const Home = () => {
     <StackNavigator.Navigator screenOptions={{ headerShown: true }}>
       <StackNavigator.Screen name="Welcome" component={Welcome} />
       <StackNavigator.Screen name="PokemonGrid" component={PokemonGrid} />
-      <StackNavigator.Screen name="Evolutions" component={Evolutions} />
       <StackNavigator.Screen name="PokeData" component={PokeData} />
+      <StackNavigator.Screen name="Evolutions" component={Evolutions} />
       <StackNavigator.Screen name="Error" component={Error} />
     </StackNavigator.Navigator>
   );

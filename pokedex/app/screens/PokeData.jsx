@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native'; // Added useNavigation here
 import { getPokemonStats } from '../../constants/api';
-import { homeIcon } from '../../constants/icons';
+import { homeIcon,chevronLeft, chevronRight } from '../../constants/icons';
 
 const PokeData = () => {
   const route = useRoute();
@@ -87,13 +87,39 @@ const PokeData = () => {
         </View>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('PokemonGrid')}>
-        <Image source={homeIcon} />
-      </TouchableOpacity>
+      <View className="flex flex-col items-center space-y-4 mt-4">
 
-      <TouchableOpacity onPress={handleEvolutionClick}>
-        <Text>Check Evolution</Text>
-      </TouchableOpacity>
+        <View className="flex flex-row justify-between items-center w-full px-6">
+
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('PokemonGrid')} 
+            className="flex justify-center items-center p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-300"
+          >
+            <Image source={chevronLeft} className="w-4 h-4 text-gray-700" />
+          </TouchableOpacity>
+      
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('PokemonGrid')} 
+            className="flex justify-center items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 hover:-translate-y-0.5 hover:shadow-lg transition"
+          >
+            <Image source={homeIcon} />
+          </TouchableOpacity>
+      
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('PokemonGrid')} 
+            className="flex justify-center items-center p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-300"
+          >
+            <Image source={chevronRight} className="w-4 h-4 text-gray-700" />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity 
+          onPress={handleEvolutionClick} 
+          className="flex justify-center items-center bg-yellow-400 text-black px-4 py-2 text-lg font-bold rounded-lg shadow-md hover:bg-yellow-500 hover:-translate-y-0.5 hover:shadow-lg transition"
+        >
+          <Text>Check Evolution</Text>
+        </TouchableOpacity>
+      </View>
+
     </View>
   );
 };

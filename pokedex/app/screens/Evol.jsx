@@ -1,65 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions } from 'react-native';
 import { chevronLeft, homeIcon, chevronRight } from '../../constants/icons';
 import Error from './Error';
-import { getEvolutionChain, getSpriteUrl } from '../../constants/api';
-
+import { getPokemonEvolutionChain, getPokemonSprite } from '../../constants/api';
 
 const EvolutionPage = ({ route, navigation }) => {
+  const { pokemonName } = route.params || {};
   const [evolutionData, setEvolutionData] = useState([]);
   const [error, setError] = useState('');
-  const [currentChainId, setCurrentChainId] = useState(1);
-  const [imageUrls, setImageUrls] = useState([]);
-  const spriteType = "normal";
+  const [sprites, setSprites] = useState([]);
+  const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width);
+
+  // Listen to device width changes
+  useEffect(() => {
+    const handleResize = () => setDeviceWidth(Dimensions.get('window').width);
+    Dimensions.addEventListener('change', handleResize);
+    return () => Dimensions.removeEventListener('change', handleResize);
+  }, []);
 
   useEffect(() => {
-    fetchEvolutionData(currentChainId);
-  }, [currentChainId]);
+    fetchEvolutionData();
+  }, [pokemonName]);
 
-  const fetchEvolutionData = async (chainId) => {
+  const fetchEvolutionData = async () => {
     try {
-      const chainData = await getEvolutionChain(chainId);
-
-      const evolutions = [];
-      const getAllEvolutions = (chain) => {
-        evolutions.push({
-          name: chain.species.name,
-          id: chain.species.url.split('/').filter(Boolean).pop(),
-        });
-        chain.evolves_to.forEach(getAllEvolutions);
-      };
-
-      getAllEvolutions(chainData.chain);
+      const evolutions = await getPokemonEvolutionChain(pokemonName);
       setEvolutionData(evolutions);
       setError('');
 
-      const initialUrls = evolutions.map((evolution) => ({
-        id: evolution.id,
-        url: getSpriteUrl({ name: evolution.name }, 'GIF', spriteType, '', '', ''),
-      }));
-
-      setImageUrls(initialUrls);
+      // Fetch sprites for each evolution
+      const spritePromises = evolutions.map((evolution) =>
+        getPokemonSprite(evolution.name)
+      );
+      const spriteUrls = await Promise.all(spritePromises);
+      setSprites(spriteUrls);
     } catch (err) {
       setError(err.message);
       setEvolutionData([]);
     }
   };
 
-  const handleNavigate = (direction) => {
-    setCurrentChainId((prevId) => (direction === 'left' ? Math.max(prevId - 1, 1) : prevId + 1));
-  };
-
-  const handleImageError = (evolutionId) => {
-    setImageUrls((prevUrls) =>
-      prevUrls.map((item) =>
-        item.id === evolutionId
-          ? { ...item, url: getSpriteUrl(evolutionId, 'normal', '', '', 'male') }
-          : item
-      )
-    );
-  };
-
-  const renderEvolution = () => {
+  const renderEvolutionCards = () => {
     if (!evolutionData.length) {
       return (
         <View className="bg-gray-100 p-6 rounded-lg flex items-center justify-center">
@@ -68,20 +49,24 @@ const EvolutionPage = ({ route, navigation }) => {
       );
     }
 
-    return evolutionData.map((evolution) => {
-      const imageUrl = imageUrls.find((item) => item.id === evolution.id)?.url;
+    return evolutionData.map((evolution, index) => {
+      const spriteUrl = sprites[index]; // Corresponding sprite URL
 
       return (
         <TouchableOpacity
-          key={evolution.id}
-          className="bg-gray-100 p-6 rounded-lg flex items-center justify-center mb-4"
+          key={evolution.name}
+          className="bg-gray-100 p-6 rounded-lg flex items-center justify-center"
+          style={{
+            marginHorizontal: 8, // Add horizontal spacing between cards
+            marginVertical: 12,  // Add vertical spacing between rows
+          }}
           onPress={() => navigation.navigate('PokeData', { pokemonName: evolution.name })}
         >
           <Image
-            source={{ uri: imageUrl }}
+            source={{ uri: spriteUrl }}
             className="w-24 h-24 mb-2"
             resizeMode="contain"
-            onError={() => handleImageError(evolution.id)}
+            onError={() => console.error(`Error loading sprite for ${evolution.name}`)}
           />
           <Text className="text-xl font-semibold text-gray-800">
             {evolution.name.charAt(0).toUpperCase() + evolution.name.slice(1)}
@@ -94,23 +79,32 @@ const EvolutionPage = ({ route, navigation }) => {
   return (
     <View className="flex-1 bg-white p-4">
       {error ? (
-        <Error message={error} onRetry={() => fetchEvolutionData(currentChainId)} />
+        <Error message={error} onRetry={fetchEvolutionData} />
       ) : (
         <>
-          <ScrollView contentContainerClassName="flex flex-col items-center">
-            {renderEvolution()}
+          <ScrollView
+            contentContainerStyle={{
+              flexDirection: deviceWidth > 768 ? 'row' : 'column', 
+              flexWrap: 'wrap', 
+              justifyContent: 'center',
+            }}
+          >
+            {renderEvolutionCards()}
           </ScrollView>
-          <View className="flex flex-row items-center justify-between mt-4">
-            <TouchableOpacity className="bg-blue-500 p-3 rounded-full" onPress={() => handleNavigate('left')}>
-              <Image source={chevronLeft} className="w-6 h-6 tint-white" />
-            </TouchableOpacity>
-            <TouchableOpacity className="bg-blue-500 p-3 rounded-full" onPress={() => navigation.goBack()}>
-              <Image source={homeIcon} className="w-6 h-6 tint-white" />
-            </TouchableOpacity>
-            <TouchableOpacity className="bg-blue-500 p-3 rounded-full" onPress={() => handleNavigate('right')}>
-              <Image source={chevronRight} className="w-6 h-6 tint-white" />
-            </TouchableOpacity>
-          </View>
+
+          <View className="flex flex-row justify-between items-center w-full px-6">
+          <TouchableOpacity className="flex justify-center items-center p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-300">
+            <Image source={chevronLeft} className="w-4 h-4 text-gray-700" />
+          </TouchableOpacity>
+      
+          <TouchableOpacity className="flex justify-center items-center bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 hover:-translate-y-0.5 hover:shadow-lg transition">
+            <Image source={homeIcon} />
+          </TouchableOpacity>
+      
+          <TouchableOpacity className="flex justify-center items-center p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-300">
+            <Image source={chevronRight} className="w-4 h-4 text-gray-700" />
+          </TouchableOpacity>
+        </View>
         </>
       )}
     </View>
