@@ -5,7 +5,7 @@ const EVOL_URL = 'https://pokeapi.co/api/v2/pokemon-species';
 /** Fetch the list of all Pokémon. */
 export const getPokemonList = async () => {
   try {
-    const response = await fetch(`${BASE_URL}?limit=1000`);
+    const response = await fetch(`${BASE_URL}`);
     if (!response.ok) throw new Error('Failed to fetch Pokémon list');
     const data = await response.json();
     return data.results || [];
