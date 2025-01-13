@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { searchIcon, filterIcon } from '../../constants/icons';
 import FilterModal from './FilterModal';
 import { getPokemonList, getPokemonSprite, getPokemonStats, getPokemonTypes } from '../../constants/api';
+import { useFonts } from 'expo-font';
 
 const PokemonGrid = () => {
   const { width: screenWidth } = useWindowDimensions();
@@ -22,6 +23,11 @@ const PokemonGrid = () => {
 
   const numColumns = Math.floor(screenWidth / 100);
 
+  const [fontsLoaded] = useFonts({
+    'PokeFont': require('../../assets/fonts/PokemonSolid.ttf'),
+  });
+
+
   useEffect(() => {
     fetchPokemonList();
   }, []);
@@ -31,10 +37,10 @@ const PokemonGrid = () => {
   }, [searchText, imgType, spriteType, formType, megaType, genderType, regionType]);
 
   useEffect(() => {
-  if (pokemonList.length > 0) {
-    setIsDataLoaded(true); 
-  }
-}, [pokemonList]);
+    if (pokemonList.length > 0) {
+      setIsDataLoaded(true); 
+    }
+  }, [pokemonList]);
 
   const fetchPokemonList = () => {
     getPokemonList()
@@ -128,7 +134,7 @@ const PokemonGrid = () => {
         className="w-12 h-12"
         resizeMode="contain" 
       />
-      <Text className="text-sm font-bold">{item.name}</Text>
+      <Text className="text-sm font-bold font-poke">{item.name}</Text>
       {/* Display Pokémon types */}
       <View className="flex-row">
         {item.types.map(type => (
@@ -150,7 +156,7 @@ const PokemonGrid = () => {
         </TouchableOpacity>
         <TextInput
           placeholder="Enter Pokémon Name or ID"
-          className="flex-1 border border-gray-300 px-4 py-2 rounded"
+          className="flex-1 border border-gray-300 px-4 py-2 rounded font-poke"
           value={searchText}
           onChangeText={handleSearch}
         />

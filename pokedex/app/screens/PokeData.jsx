@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { getPokemonStats } from '../../constants/api';
 import { loadingText, homeIcon, chevronLeft, chevronRight } from '../../constants/icons';
+import { useFonts } from 'expo-font';
 
 const PokeData = () => {
   const route = useRoute();
@@ -14,6 +15,11 @@ const PokeData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Load the custom PokeFont
+  const [fontsLoaded] = useFonts({
+    'PokeFont': require('../../assets/fonts/PokemonSolid.ttf'),
+  });
 
   // Ensure pokemonList is available
   useEffect(() => {
@@ -54,32 +60,35 @@ const PokeData = () => {
     fetchPokemonData();
   }, [pokemon?.name]);
 
-  
+  if (!fontsLoaded) {
+    return <Text>Loading fonts...</Text>;
+  }
+
   if (loading) {
     return <Image source={loadingText} className="w-[100px] h-[40px] mt-[123px] mx-[9px] z-10" />;
   }
-  
+
   if (error) {
     return <Text>Error: {error}</Text>;
   }
-  
+
   if (!pokemonData) {
     return <Text>No Pokémon data found.</Text>;
   }
-  
+
   const handlePrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
       navigation.navigate('PokeData', { pokemon: pokemonList[currentIndex - 1], pokemonList });
     }
   };
-  
+
   const handleEvolutionClick = () => {
     if (pokemonData) {
       navigation.navigate('Evolutions', { pokemonName: pokemonData.name, pokemonId: pokemonData.id });
     }
   };
-  
+
   const handleNext = () => {
     if (currentIndex < pokemonList.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -88,9 +97,9 @@ const PokeData = () => {
   };
 
   return (
-    <View className="flex-1 p-4 bg-gray-100 rounded-lg">
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="p-4 bg-gray-100 rounded-lg">
       {/* Name Section */}
-      <Text className="text-xl font-bold text-center text-gray-800 capitalize mb-4">
+      <Text className="text-xl font-bold text-center text-gray-800 capitalize mb-4 font-poke">
         {pokemonData.name.toUpperCase()}
       </Text>
 
@@ -105,20 +114,20 @@ const PokeData = () => {
 
       {/* Physical Attributes */}
       <View className="flex-row justify-around mb-4">
-        <Text className="text-gray-700 text-base">Height: {pokemonData.height} dm</Text>
-        <Text className="text-gray-700 text-base">Weight: {pokemonData.weight} hg</Text>
+        <Text className="text-gray-700 font-poke">Height: {pokemonData.height} dm</Text>
+        <Text className="text-gray-700 font-poke">Weight: {pokemonData.weight} hg</Text>
       </View>
 
       {/* Base Stats */}
       <View className="bg-white shadow rounded-lg p-4">
-        <Text className="text-lg font-semibold text-gray-800 mb-2">Base Stats</Text>
+        <Text className="text-lg font-semibold text-gray-800 mb-2 font-poke">Base Stats</Text>
         <View className="space-y-2">
-          <Text className="text-gray-700">HP: {pokemonData.stats.hp}</Text>
-          <Text className="text-gray-700">Attack: {pokemonData.stats.attack}</Text>
-          <Text className="text-gray-700">Defense: {pokemonData.stats.defense}</Text>
-          <Text className="text-gray-700">Special Attack: {pokemonData.stats.specialAttack}</Text>
-          <Text className="text-gray-700">Special Defense: {pokemonData.stats.specialDefense}</Text>
-          <Text className="text-gray-700">Speed: {pokemonData.stats.speed}</Text>
+          <Text className="text-gray-700 font-poke">HP: {pokemonData.stats.hp}</Text>
+          <Text className="text-gray-700 font-poke">Attack: {pokemonData.stats.attack}</Text>
+          <Text className="text-gray-700 font-poke">Defense: {pokemonData.stats.defense}</Text>
+          <Text className="text-gray-700 font-poke">Special Attack: {pokemonData.stats.specialAttack}</Text>
+          <Text className="text-gray-700 font-poke">Special Defense: {pokemonData.stats.specialDefense}</Text>
+          <Text className="text-gray-700 font-poke">Speed: {pokemonData.stats.speed}</Text>
         </View>
       </View>
 
@@ -153,10 +162,10 @@ const PokeData = () => {
           onPress={handleEvolutionClick} 
           className="flex justify-center items-center bg-yellow-400 text-black px-4 py-2 text-lg font-bold rounded-lg shadow-md hover:bg-yellow-500 hover:-translate-y-0.5 hover:shadow-lg transition"
         >
-          <Text>Check Evolution</Text>
+          <Text className="font-poke">Check Evolution</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

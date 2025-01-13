@@ -2,14 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { WTP, loading, loadingText, Pokedex, errorIcon } from '../../constants/icons';
-import  Error  from './Error';
+import Error from './Error';
+import { useFonts } from 'expo-font';
 import '../../global.css';
-
 
 const Welcome = () => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
 
+  // Load the custom PokeFont
+  const [fontsLoaded] = useFonts({
+    'PokeFont': require('../../assets/fonts/PokemonSolid.ttf'),
+  });
+
+  // If fonts aren't loaded yet, show loading state
+  if (!fontsLoaded) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <Text className="font-Poke text-lg">Loading fonts...</Text>
+      </View>
+    );
+  }
+
+  // Ensure hooks are called unconditionally
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (isLoading) {
@@ -37,7 +52,7 @@ const Welcome = () => {
     return (
       <View className="flex-1 items-center justify-center bg-white">
         <Image source={WTP} className="w-[350px] h-[50px]" />
-        <Text className="font-regular text-lg text-secondary text-center mt-4">
+        <Text className="font-Poke text-lg text-secondary text-center mt-4">
           Discover and learn about Pokemon
         </Text>
         <Image source={loading} className="w-[130px] h-[130px] mt-[210px] mb-[10px] mx-[10px] z-10" />
