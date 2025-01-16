@@ -74,4 +74,3 @@ Special acknowledgment to:
 - The Pokémon Company
 - PokeAPI development team
 - Open-source community contributors
-
