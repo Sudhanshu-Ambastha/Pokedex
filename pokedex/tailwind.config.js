@@ -7,7 +7,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        poke: ['PokeFont', ...defaultTheme.fontFamily.sans], // use the font name here
+        poke: ['PokeFont', ...defaultTheme.fontFamily.sans],
+        poke2: ['PokeFont2', ...defaultTheme.fontFamily.sans],
       },
     },
   },

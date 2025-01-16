@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, FlatList, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { searchIcon, filterIcon } from '../../constants/icons';
+import { searchIcon, filterIcon, loadingText } from '../../constants/icons';
 import FilterModal from './FilterModal';
 import { getPokemonList, getPokemonSprite, getPokemonStats, getPokemonTypes } from '../../constants/api';
 import { useFonts } from 'expo-font';
@@ -121,7 +121,7 @@ const PokemonGrid = () => {
   };
 
   const handlePokemonPress = (pokemon) => {
-    navigation.navigate('PokeData', { pokemon, pokemonList }); 
+    navigation.navigate('PokeData', { pokemon, pokemonList });
   };
 
   const renderPokemon = ({ item }) => (
@@ -132,7 +132,8 @@ const PokemonGrid = () => {
       <Image 
         source={{ uri: item.spriteUrl }} 
         className="w-12 h-12"
-        resizeMode="contain" 
+        resizeMode="contain"
+        onError={() => console.log('Failed to load sprite')} 
       />
       <Text className="text-sm font-bold font-poke">{item.name}</Text>
       {/* Display Pokémon types */}
@@ -147,6 +148,14 @@ const PokemonGrid = () => {
       </View>
     </TouchableOpacity>
   );
+
+  if (!isDataLoaded) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <Image source={loadingText} className="w-24 h-24 mb-4" />
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-white p-2">

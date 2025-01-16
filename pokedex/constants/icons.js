@@ -19,7 +19,10 @@ import Oscar from '../assets/Error/unown-oscar.gif';
 import Exclamation from '../assets/Error/unown-exclamation.gif';
 import Zero from '../assets/Error/electrode.gif';
 
+import typeIcons from '../assets/PokemonTypes/index';
+import bgType from '../assets/background/index';
+
 // Export remaining icons as needed
 export {searchIcon, filterIcon, left, chevronLeft, chevronRight, homeIcon, loading, Pokedex, WTP, loadingText, PokeFont,
-    Echo, Romeo, shinyRomeo, Oscar, Exclamation, Zero};
+    Echo, Romeo, shinyRomeo, Oscar, Exclamation, Zero, typeIcons, bgType};
 
