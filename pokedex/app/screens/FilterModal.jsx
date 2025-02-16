@@ -88,6 +88,7 @@ const FilterModal = ({
           onValueChange={(itemValue) => setGenderType(itemValue)}
           className="h-12 w-full mb-5"
         >
+          <Picker.Item label="All" value="all" />
           <Picker.Item label="Male" value="male" />
           <Picker.Item label="Female" value="female" />
         </Picker>

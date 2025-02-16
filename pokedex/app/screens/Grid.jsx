@@ -118,6 +118,20 @@ const PokemonGrid = () => {
     });
   }
 
+  // Apply Gender Filter
+  if (genderType !== 'all') {
+    filtered = filtered.filter((pokemon) => {
+      const nameLower = pokemon.name.toLowerCase();
+      if (genderType === 'male') {
+        return nameLower.endsWith('-m') || nameLower.endsWith('-male');
+      }
+      if (genderType === 'female') {
+        return nameLower.endsWith('-f') || nameLower.endsWith('-female');
+      }
+      return true;
+    });
+  }
+
   // Apply Region Filter
   if (regionType && regionType !== 'all') {
     const regionIndices = {
