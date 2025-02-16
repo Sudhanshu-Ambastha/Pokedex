@@ -87,34 +87,56 @@ const PokemonGrid = () => {
   };
 
   const applyFilters = () => {
-    let filtered = pokemonList;
+  let filtered = pokemonList;
 
-    if (searchText) {
-      filtered = filtered.filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
+  // Apply search filter
+  if (searchText) {
+    const searchLower = searchText.toLowerCase();
+    filtered = filtered.filter((pokemon) => pokemon.name.toLowerCase().includes(searchLower));
+  }
 
-    if (regionType && regionType !== 'all') {
-      const regionIndices = {
-        kanto: [1, 151],
-        johto: [152, 251],
-        hoenn: [252, 386],
-        sinnoh: [387, 493],
-        unova: [494, 649],
-        kalos: [650, 721],
-        alola: [722, 898],
-        galar: [899, 1000],
-        paldea: [1001, 1075],
-      };
-      const [start, end] = regionIndices[regionType] || [1, 151]; 
-      if (start !== undefined && end !== undefined) {
-        filtered = filtered.filter((pokemon) => pokemon.id >= start && pokemon.id <= end);
-      }
-    }
+  // Apply Form Type Filter
+  if (formType !== 'standard') {
+    filtered = filtered.filter((pokemon) => {
+      const nameLower = pokemon.name.toLowerCase();
+      if (formType === 'alola' && nameLower.includes('alola')) return true;
+      if (formType === 'hisui' && nameLower.includes('hisui')) return true;
+      return false;
+    });
+  }
 
-    setFilteredPokemon(filtered);
-  };
+  // Apply Mega Evolution Filter
+  if (megaType !== 'regular') {
+    filtered = filtered.filter((pokemon) => {
+      const nameLower = pokemon.name.toLowerCase();
+      if (megaType === 'mega' && nameLower.includes('mega')) return true;
+      if (megaType === 'megax' && nameLower.includes('mega-x')) return true;
+      if (megaType === 'megay' && nameLower.includes('mega-y')) return true;
+      if (megaType === 'primal' && nameLower.includes('primal')) return true;
+      if (megaType === 'gmax' && nameLower.includes('gmax')) return true;
+      return false;
+    });
+  }
+
+  // Apply Region Filter
+  if (regionType && regionType !== 'all') {
+    const regionIndices = {
+      kanto: [1, 151],
+      johto: [152, 251],
+      hoenn: [252, 386],
+      sinnoh: [387, 493],
+      unova: [494, 649],
+      kalos: [650, 721],
+      alola: [722, 809],
+      galar: [810, 898],
+      paldea: [899, 1025],
+    };
+    const [start, end] = regionIndices[regionType] || [1, 151]; 
+    filtered = filtered.filter((pokemon) => pokemon.id >= start && pokemon.id <= end);
+  }
+
+  setFilteredPokemon(filtered);
+};
 
   const toggleFilterSidebar = () => {
     setFilterVisible(!isFilterVisible);
