@@ -1,6 +1,6 @@
 const BASE_URL = 'https://pokeapi-proxy.freecodecamp.rocks/api/pokemon';
 const EVOL_URL = 'https://pokeapi.co/api/v2/pokemon-species';
-// const SPRITE_URL = 'https://raw.githubusercontent.com/Sudhanshu-Ambastha/Pokemon-3D-Models/main/PokeData.json';
+// const SPRITE_URL = 'https://pokemon3d-api.onrender.com/v1/';
 
 /** Fetch the list of all Pokémon. */
 export const getPokemonList = async () => {

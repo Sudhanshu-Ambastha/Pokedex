@@ -16,7 +16,7 @@ const PokemonGrid = () => {
   const [spriteType, setSpriteType] = useState('normal');
   const [formType, setFormType] = useState('standard');
   const [megaType, setMegaType] = useState('regular');
-  const [genderType, setGenderType] = useState('male');
+  const [genderType, setGenderType] = useState('all');
   const [regionType, setRegionType] = useState('all');
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
