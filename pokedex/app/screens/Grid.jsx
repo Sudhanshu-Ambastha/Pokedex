@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, FlatList, useWindowDimensions } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import { searchIcon, filterIcon, loadingText } from '../../constants/icons';
 import FilterModal from './FilterModal';
@@ -209,13 +210,12 @@ const PokemonGrid = () => {
           <Image source={searchIcon} />        
         </TouchableOpacity>
       </View>
-      <FlatList
+      <FlashList
         data={filteredPokemon}
         renderItem={renderPokemon}
         keyExtractor={(item) => item.id.toString()}
         numColumns={numColumns}
-        columnWrapperStyle={{ justifyContent: 'space-between' }}
-        key={numColumns}
+        estimatedItemSize={100}
       />
       <FilterModal
         isVisible={isFilterVisible}
