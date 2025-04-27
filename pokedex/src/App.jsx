@@ -7,7 +7,7 @@ function App() {
       <Route path="/" element={<Welcome />} />
       <Route path="/Grid" element={<Grid />} />
       <Route path="/pokedata/:pokemonId/:formName" element={<PokeData />} />
-      <Route path="/Evol" element={<Evol />} />
+      <Route path="/Evol/:pokemonName/:formName" element={<Evol />} />
       <Route path="*" element={<Error />} />
     </Routes>
   );

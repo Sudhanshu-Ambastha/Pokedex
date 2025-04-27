@@ -206,7 +206,7 @@ const PokeData = () => {
           <img src={chevronLeft} alt="Previous" className="w-8 h-8" />
         </button>
       <button 
-          onClick={() => navigate('/Evol')}
+          onClick={() => navigate(`/Evol/${pokemonData.name}/${selectedForm}`)}
           className="p-2 bg-blue-500 text-white rounded hover:bg-blue-700"
         >
           Evolution List

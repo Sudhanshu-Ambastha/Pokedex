@@ -1,19 +1,23 @@
-import { Echo, Romeo, shinyRomeo, Oscar, Exclamation, Zero } from '../constant/icon.js'; // Adjust paths
-import '../index.css'; // Import your Tailwind CSS
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Echo, Romeo, shinyRomeo, Oscar, Exclamation, Zero } from '../constant/icon.js';
+import '../index.css';
+import { useNavigate } from 'react-router-dom';
 
-const Error = () => {  // Separate component for 404
+const Error = () => {
   const navigate = useNavigate();
 
   const handleRetry = () => {
-    navigate('/'); // Or navigate to a specific route
+    try {
+      navigate(-2);
+    } catch {
+      navigate('/');
+    }
   };
 
   return (
     <div className="flex-1 bg-gray-100 justify-center items-center">
       <div className="flex flex-col justify-center items-center mt-20 pb-40 bg-gray-100">
         <p className="text-3xl text-gray-400 font-poke">
-          E    r     r     o    r       !
+          E    r     r     o    r       !
         </p>
 
         <div className="flex flex-row justify-center items-center my-5">
@@ -33,11 +37,11 @@ const Error = () => {  // Separate component for 404
         </div>
 
         <button className="mt-5 px-4 py-2 bg-red-500 rounded-md" onClick={handleRetry}>
-          <p className="text-white text-lg font-poke">Go Home</p> {/* Changed button text */}
+          <p className="text-white text-lg font-poke">Go Back</p>
         </button>
       </div>
     </div>
   );
 };
 
-export default Error; 
+export default Error;
