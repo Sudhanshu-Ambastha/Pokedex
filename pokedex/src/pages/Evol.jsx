@@ -13,7 +13,7 @@ const EvolutionPage = () => {
   const [pokemon3DData, setPokemon3DData] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const modelViewerRef = useRef({}); // Ref to store model-viewer instances
+  const modelViewerRef = useRef({}); 
 
   const fetchInitialData = useCallback(async () => {
     setLoading(true);
@@ -44,9 +44,11 @@ const EvolutionPage = () => {
     fetchInitialData();
   }, [fetchInitialData]);
 
-  const getPokemon3D = (name) => {
+  const getPokemon3D = (nameOrId) => {
+    const byId = pokemon3DData[nameOrId];
+    if (byId) return byId;
     return Object.values(pokemon3DData).find(p =>
-      p.name && p.name.toLowerCase() === name.toLowerCase()
+      p.name && p.name.toLowerCase() === nameOrId.toLowerCase()
     );
   };
 
@@ -54,15 +56,15 @@ const EvolutionPage = () => {
     return pokemon3D?.forms?.[0]?.model || null;
   };
 
-  const getAnimations = (pokemon3D) => {
-    return Object.keys(pokemon3D?.forms?.[0]?.animations || {});
+  const getPokemonIdFromUrl = (url) => {
+    return url.split('/').slice(-2, -1)[0];
   };
 
   const renderEvolutionCards = () => {
     if (loading) {
       return (
         <div className="flex justify-center items-center h-48">
-          <img src={require('../constant/icon').loadingText} alt="Loading" className="w-[80px] h-[30px]" />
+          <img src={import('../constant/icon').loadingText} alt="Loading" className="w-[80px] h-[30px]" />
         </div>
       );
     }
@@ -76,18 +78,19 @@ const EvolutionPage = () => {
     }
 
     return evolutionData.map((evolution) => {
-      const pokemon3DInfo = getPokemon3D(evolution.name);
+      const pokemonId = getPokemonIdFromUrl(evolution.url);
+      const pokemon3DInfo = getPokemon3D(pokemonId);
       const modelUrl = getModelUrl(pokemon3DInfo);
-      const animations = getAnimations(pokemon3DInfo);
-      const defaultAnimation = animations[0] || '';
+      const defaultForm = pokemon3DInfo?.forms?.find(f => f.formName === 'regular') || pokemon3DInfo?.forms?.[0];
+      const formNameForNavigation = defaultForm?.formName?.toLowerCase().replace(/ /g, '-') || 'regular';
 
       return (
         <div
           key={evolution.name}
-          className="bg-gray-100 p-6 rounded-lg flex flex-col items-center justify-center m-4 w-64 h-80" // Increased card size
+          className="bg-gray-100 p-6 rounded-lg flex flex-col items-center justify-center m-4 w-64 h-80"
         >
           {modelUrl ? (
-            <div className="relative w-48 h-48"> {/* Increased model viewer size */}
+            <div className="relative w-48 h-48">
               <model-viewer
                 ref={(el) => (modelViewerRef[evolution.name] = el)}
                 src={modelUrl}
@@ -96,7 +99,6 @@ const EvolutionPage = () => {
                 touch-action="pan-y"
                 environment-image="neutral"
                 class="w-full h-full"
-                animation-name={defaultAnimation}
                 autoplay
               ></model-viewer>
             </div>
@@ -109,7 +111,7 @@ const EvolutionPage = () => {
             {evolution.name.charAt(0).toUpperCase() + evolution.name.slice(1)}
           </p>
           <button
-            onClick={() => navigate(`/pokemon/${evolution.url.split('/').slice(-2, -1)[0]}`)}
+            onClick={() => navigate(`/pokedata/${pokemonId}/${formNameForNavigation}`)}
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
           >
             View Stats

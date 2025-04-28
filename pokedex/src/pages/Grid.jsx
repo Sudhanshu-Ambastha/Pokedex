@@ -65,20 +65,20 @@ function Grid() {
       );
     }
 
-    if (formFilter !== 'all') {
-      filtered = filtered
-        .map(pokemon => ({
-          ...pokemon,
-          forms: pokemon.forms.filter(form => form.formName === formFilter),
-        }))
-        .filter(pokemon => pokemon.forms.length > 0);
+    let finalFilteredForms = [];
+    if (formFilter === 'all') {
+      finalFilteredForms = filtered.flatMap(pokemon =>
+        pokemon.forms.map(form => ({ ...form, id: pokemon.id }))
+      );
+    } else {
+      finalFilteredForms = filtered.flatMap(pokemon =>
+        pokemon.forms
+          .filter(form => form.formName === formFilter)
+          .map(form => ({ ...form, id: pokemon.id }))
+      );
     }
 
-    const finalFiltered = filtered.flatMap(pokemon =>
-      pokemon.forms.map(form => ({ ...form, id: pokemon.id }))
-    );
-
-    setFilteredPokemon(finalFiltered);
+    setFilteredPokemon(finalFilteredForms);
   }, [allPokemonData, formFilter, generationFilter, searchInput, generationRanges]);
 
   useEffect(() => {
