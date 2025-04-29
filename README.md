@@ -70,6 +70,14 @@ To run this project locally, follow these steps:
     ```
 5.  Open your browser and navigate to the address provided by Vite (usually `http://localhost:5173`).
 
+## gh-pages deployment
+```
+npm install gh-pages
+```
+```
+npm run deploy
+```
+
 ## Acknowledgments
 
 -   Thank you to the developers of the PokeAPI and the Pokémon3D API for providing the valuable data and resources that power this application.
