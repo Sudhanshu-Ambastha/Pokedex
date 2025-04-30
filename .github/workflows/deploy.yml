@@ -30,7 +30,11 @@ jobs:
       - name: Build the application
         run: cd pokedex && npm run build
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: pokedex/dist/
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-        with:
-          artifact_dir: pokedex/dist
