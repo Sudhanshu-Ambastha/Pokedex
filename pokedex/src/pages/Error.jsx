@@ -9,7 +9,7 @@ const Error = () => {
     try {
       navigate(-2);
     } catch {
-      navigate('/');
+      navigate('/Pokedex');
     }
   };
 

@@ -86,7 +86,7 @@ function Grid() {
   }, [allPokemonData, formFilter, generationFilter, searchInput, filterPokemon]);
 
   const handlePokemonClick = (pokemon) => {
-    navigate(`/pokedata/${pokemon.id}/${pokemon.formName.toLowerCase().replace(/ /g, '-')}`);
+    navigate(`/Pokedex/pokedata/${pokemon.id}/${pokemon.formName.toLowerCase().replace(/ /g, '-')}`);
   };
 
   return (

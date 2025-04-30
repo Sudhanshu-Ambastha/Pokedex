@@ -111,7 +111,7 @@ const EvolutionPage = () => {
             {evolution.name.charAt(0).toUpperCase() + evolution.name.slice(1)}
           </p>
           <button
-            onClick={() => navigate(`/pokedata/${pokemonId}/${formNameForNavigation}`)}
+            onClick={() => navigate(`/Pokedex/pokedata/${pokemonId}/${formNameForNavigation}`)}
             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
           >
             View Stats
@@ -124,10 +124,10 @@ const EvolutionPage = () => {
   return (
     <div className="flex-1 bg-white p-4">
       <div className="flex justify-between items-center mb-4">
-        <button onClick={() => navigate(`/pokemon/${pokemonName}`)}>
+        <button onClick={() => navigate(`/Pokedex/pokemon/${pokemonName}`)}>
           <img src={chevronLeft} alt="Back" className="w-8 h-8" />
         </button>
-        <button onClick={() => navigate('/Grid')}>
+        <button onClick={() => navigate('/Pokedex/Grid')}>
           <img src={homeIcon} alt="Home" className="w-8 h-8" />
         </button>
         <div></div>

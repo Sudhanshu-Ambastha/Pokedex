@@ -118,7 +118,7 @@ export const getPokemonTypes = async (nameOrId) => {
     const pokemonData = await getPokemonByNameOrId(nameOrId);
     return pokemonData.types.map((typeInfo) => ({
       name: typeInfo.type.name,
-      iconUrl: `https://github.com/Sudhanshu-Ambastha/Pokedex/tree/main/PokemonTypes/${typeInfo.type.name.toUpperCase()}.png`,
+      iconUrl: `../assets/PokemonTypes/${typeInfo.type.name.toUpperCase()}.png`,
     }));
   } catch (error) {
     console.error(`❌ Error fetching Pokémon types for ${nameOrId}:`, error.message);

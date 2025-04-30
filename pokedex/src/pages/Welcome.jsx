@@ -18,7 +18,7 @@ const Welcome = () => {
 
   useEffect(() => {
     if (!isLoading && !errorMessage) {
-      navigate('/Grid');  
+      navigate('/Pokedex/Grid');  
     }
   }, [isLoading, navigate, errorMessage]);
 
