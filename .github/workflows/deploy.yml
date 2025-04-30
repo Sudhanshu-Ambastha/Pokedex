@@ -5,6 +5,10 @@ on:
     branches: ["web-desktop"]
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  pages: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
