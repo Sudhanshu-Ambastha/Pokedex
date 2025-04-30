@@ -1,4 +1,4 @@
-ame: Deploy Pokedex to GitHub Pages
+name: Deploy Pokedex to GitHub Pages
 
 on:
   push:
