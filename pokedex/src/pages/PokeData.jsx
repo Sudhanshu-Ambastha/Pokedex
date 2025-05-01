@@ -23,24 +23,23 @@ const PokeData = () => {
 
   const [pokemonTypes, setPokemonTypes] = useState([]);
   const [typeImagePaths, setTypeImagePaths] = useState({});
+  const [, setTypeImageError] = useState('');
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Navigation handlers
   const handlePrevPokemon = () => {
     if (parseInt(pokemonId) > 1) {
-      navigate(`/pokemon/${parseInt(pokemonId) - 1}/${selectedForm}`);
+      navigate(`/Pokedex/pokedata/${parseInt(pokemonId) - 1}/${selectedForm}`);
     }
   };
 
   const handleNextPokemon = () => {
     if (parseInt(pokemonId) < 1025) {
-      navigate(`/pokemon/${parseInt(pokemonId) + 1}/${selectedForm}`);
+      navigate(`/Pokedex/pokedata/${parseInt(pokemonId) + 1}/${selectedForm}`);
     }
   };
 
-  // Fetch stats and types
   useEffect(() => {
     const fetchStatsAndTypes = async () => {
       try {
@@ -53,15 +52,19 @@ const PokeData = () => {
         setPokemonTypes(types);
 
         const imagePaths = {};
+        let hasImageError = false;
         for (const type of types) {
           try {
             const imageModule = await import(`../assets/PokemonTypes/${type.name.toUpperCase()}.png`);
             imagePaths[type.name] = imageModule.default;
           } catch (err) {
-            console.error(`Could not load image for type: ${type.name}`);
+            console.error(`Could not load image for type: ${type.name}`, err);
+            imagePaths[type.name] = null;
+            hasImageError = true;
           }
         }
         setTypeImagePaths(imagePaths);
+        setTypeImageError(hasImageError ? 'Some type icons could not be loaded.' : '');
       } catch (err) {
         setError(err.message || 'Failed to fetch stats or types.');
       } finally {
@@ -115,15 +118,28 @@ const PokeData = () => {
     const modelViewer = modelViewerRef.current;
     if (!modelViewer) return;
 
+    const playAnimation = () => {
+      if (selectedAnimation && modelViewer.availableAnimations.includes(selectedAnimation)) {
+        modelViewer.play(selectedAnimation);
+      }
+    };
+
     const handleModelLoad = () => {
       const anims = modelViewer.availableAnimations || [];
       if (anims.length > 0 && !selectedAnimation) {
         setAvailableAnimations(anims);
         setSelectedAnimation(anims[0]);
+      } else if (selectedAnimation) {
+        playAnimation(); 
       }
     };
 
     modelViewer.addEventListener('load', handleModelLoad);
+
+    if (modelUrl && selectedAnimation && modelViewer.loaded) {
+      playAnimation();
+    }
+
     return () => modelViewer.removeEventListener('load', handleModelLoad);
   }, [modelUrl, selectedAnimation]);
 
@@ -147,7 +163,7 @@ const PokeData = () => {
   return (
     <div className="p-4 bg-gray-100 rounded-lg flex-grow">
       <div className="flex justify-between items-center mb-4">
-        <button onClick={() => navigate('/Grid')}>
+        <button onClick={() => navigate('/Pokedex/Grid')}>
           <img src={homeIcon} alt="Back" className="w-8 h-8" />
         </button>
       </div>

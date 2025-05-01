@@ -25,7 +25,7 @@ const Welcome = () => {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-white">
-        <img src={WTP} alt="WTP Logo" className="w-7/12 max-w-xl h-32 mt-7 md:mt-10 w-full md:w-7/12 lg:w-7/12" />
+        <img src={WTP} alt="WTP Logo" className="max-w-xl h-32 mt-7 md:mt-10 w-full md:w-7/12 lg:w-7/12" />
         <p className="font-[PokeSolid] text-xl text-black text-center mt-4 px-4">
           Discover and learn about Pokemon
         </p>

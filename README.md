@@ -71,12 +71,46 @@ To run this project locally, follow these steps:
 5.  Open your browser and navigate to the address provided by Vite (usually `http://localhost:5173`).
 
 ## gh-pages deployment
-```
-npm install gh-pages
-```
-```
-npm run deploy
-```
+
+This section outlines how to deploy your Pokedex to GitHub Pages.
+
+1.  **Install the `gh-pages` package as a development dependency:**
+    ```bash
+    npm install gh-pages --save-dev
+    ```
+
+2.  **Add deployment scripts to your `package.json`:**
+    Open your `package.json` file and add the following scripts to the `scripts` section:
+
+    ```json
+    "scripts": {
+      // ... other scripts
+      "predeploy": "npm run build",
+      "deploy": "gh-pages -d dist"
+    }
+    ```
+    * `predeploy`: This script will build your project before deployment.
+    * `deploy`: This script will publish the `dist` folder (your build output) to the `gh-pages` branch. **Note:** If your build output folder is different (e.g., `build`), adjust the `-d` flag accordingly.
+
+3.  **Build your project:**
+    ```bash
+    npm run build
+    ```
+
+4.  **Deploy to GitHub Pages:**
+    ```bash
+    npm run deploy
+    ```
+
+5.  **Configure GitHub Pages in your repository settings:**
+    * Go to your GitHub repository's **Settings** tab.
+    * Navigate to **Pages** (usually in the left sidebar).
+    * Under "Source", select **Deploy from a branch**.
+    * Choose the **gh-pages** branch.
+    * Set the "Folder" to **/(root)**.
+    * Click **Save**.
+
+    Your Pokedex will be live at `https://Sudhanshu-Ambastha.github.io/Pokedex`.
 
 ## Acknowledgments
 
