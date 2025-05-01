@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'PokeSolid';
+    src: url('./assets/fonts/PokemonSolid.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PokeHollow';
+    src: url('./assets/fonts/PokemonHollow.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
