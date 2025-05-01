@@ -5,6 +5,11 @@ on:
     branches: ["web-desktop"]
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  pages: write
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,8 +25,16 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: cd pokedex && npm install
 
-      - name: Build and Deploy
-        run: |
-          npm run deploy
+      - name: Build the application
+        run: cd pokedex && npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: pokedex/dist/
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
