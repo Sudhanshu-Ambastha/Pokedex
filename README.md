@@ -111,6 +111,7 @@ This section outlines how to deploy your Pokedex to GitHub Pages.
     * Click **Save**.
 
     Your Pokedex will be live at `https://Sudhanshu-Ambastha.github.io/Pokedex`.
+    **For a more detailed explanation on how to deploy Vite React applications to GitHub Pages, you can refer to this guide: [Vite React Deploy GitHub Pages](https://www.vd-developer.online/blog/vite-react-deploy-github)**
 
 ## Acknowledgments
 
