@@ -92,15 +92,15 @@ function Grid() {
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
       <header className="bg-green-500 text-white text-center py-4">
-        <h1 className="text-2xl font-bold">Pokémon 3D Model Viewer</h1>
+        <h1 className="text-xl sm:text-2xl font-bold">Pokémon 3D Model Viewer</h1>
       </header>
 
       <div className="container mx-auto p-4">
-        <div className="flex justify-center items-center mb-4 space-x-2">
+        <div className="flex flex-col sm:flex-row justify-center items-center mb-4 space-y-2 sm:space-y-0 sm:space-x-2">
           <select
             value={formFilter}
             onChange={(e) => setFormFilter(e.target.value)}
-            className="px-3 py-2 rounded border border-gray-300"
+            className="px-3 py-2 rounded border border-gray-300 text-sm"
           >
             <option value="all">All Forms</option>
             <option value="regular">Regular</option>
@@ -120,7 +120,7 @@ function Grid() {
           <select
             value={generationFilter}
             onChange={(e) => setGenerationFilter(e.target.value)}
-            className="px-3 py-2 rounded border border-gray-300"
+            className="px-3 py-2 rounded border border-gray-300 text-sm"
           >
             <option value="all">All Generations</option>
             <option value="1">Gen 1</option>
@@ -138,13 +138,13 @@ function Grid() {
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search Pokémon by Name or ID"
-            className="px-3 py-2 rounded border border-gray-300"
+            placeholder="Search Pokémon"
+            className="px-3 py-2 rounded border border-gray-300 text-sm w-full sm:w-auto"
           />
 
           <button
             onClick={filterPokemon}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm"
           >
             🔍Search
           </button>
@@ -157,7 +157,7 @@ function Grid() {
           {filteredPokemon.map((pokemon) => (
             <div
               key={`${pokemon.id}-${pokemon.formName}`}
-              className="border border-gray-300 rounded-lg bg-white shadow-md p-4 text-center cursor-pointer"
+              className="border border-gray-300 rounded-lg bg-white shadow-md p-2 sm:p-4 text-center cursor-pointer"
               onClick={() => handlePokemonClick(pokemon)}
             >
               <model-viewer
@@ -165,10 +165,11 @@ function Grid() {
                 alt={`Model of ${pokemon.name}`}
                 camera-controls
                 environment-image="neutral"
-                className="w-full h-60"
+                className="w-full h-32 sm:h-60"
+                loading="lazy"
               ></model-viewer>
-              <div className="text-gray-600 text-sm mt-2">ID: {pokemon.id}</div>
-              <h2 className="text-lg font-semibold mt-1">{pokemon.name}</h2>
+              <div className="text-gray-600 text-xs sm:text-sm mt-1">ID: {pokemon.id}</div>
+              <h2 className="text-sm sm:text-lg font-semibold mt-1">{pokemon.name}</h2>
             </div>
           ))}
         </div>
